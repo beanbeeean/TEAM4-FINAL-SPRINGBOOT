@@ -1,33 +1,56 @@
 plugins {
+    id 'org.springframework.boot' version '2.6.7'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
-    id 'war'
-    id 'org.springframework.boot' version '3.0.1'
-    id 'io.spring.dependency-management' version '1.1.0'
 }
 
 group = 'com.office'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
+sourceCompatibility = '11'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
+//    implementation 'org.springframework.boot:spring-boot-starter-validation'
+//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    implementation 'org.apache.poi:poi:5.2.0'
+
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
+//    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.4'
+//    implementation group: 'org.springdoc', name: 'springdoc-openapi-security', version: '1.6.4'
+//    testImplementation group: 'org.springdoc', name: 'springdoc-openapi-webmvc-core', version: '1.6.4'
+
+//    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+    testImplementation 'org.projectlombok:lombok:1.18.28'
+//    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+//    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
-    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//    testImplementation 'org.springframework.security:spring-security-test'
+
+    // DB
+    implementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '2.3.1'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'mysql:mysql-connector-java' // 최신 버전을 사용하세요
+    runtimeOnly 'mysql:mysql-connector-java:8.0.28'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.0'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:2.2.2'
+
+    // DB
+//    implementation 'rorg.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.0'
+//    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+//    runtimeOnly 'mysql:mysql-connector-java'
 }
 
 tasks.named('test') {
