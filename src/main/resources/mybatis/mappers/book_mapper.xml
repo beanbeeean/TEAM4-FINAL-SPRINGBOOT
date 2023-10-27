@@ -9,8 +9,8 @@
     </select>
 
     <insert id="insertNewBook" >
-         INSERT INTO tbl_books( b_isbn, b_cover, b_title, b_author, b_publisher, b_publish_date, b_description, b_reg_date,  b_mod_date)
-        VALUES (#{b_isbn}, #{b_cover}, #{b_title}, #{b_author}, #{b_publisher}, #{b_publish_date}, #{b_description}, now(), now())
+         INSERT INTO tbl_books( b_isbn, b_cover, b_title, b_author, b_publisher, b_publish_date, b_description, b_link, b_reg_date,  b_mod_date)
+        VALUES (#{b_isbn}, #{b_cover}, #{b_title}, #{b_author}, #{b_publisher}, #{b_publish_date}, #{b_description}, #{b_link}, now(), now())
     </insert>
 
     <select id="selectBooks" resultType="Hashmap">

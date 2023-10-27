@@ -67,6 +67,7 @@ public class BookService {
                 bookDto.setB_author((String) jObj.get("author"));
                 bookDto.setB_publish_date((String) jObj.get("pubDate"));
                 bookDto.setB_description((String) jObj.get("description"));
+                bookDto.setB_link((String) jObj.get("link"));
                 bookDto.setB_isbn((String) jObj.get("isbn"));
                 bookDto.setB_publisher((String) jObj.get("publisher"));
 
@@ -100,6 +101,9 @@ public class BookService {
     public BookDto getBookDetail(int bNo) {
         log.info("[BookService] getBookDetail()");
 
-        return iBookDaoMapper.getBookDetail(bNo);
+        BookDto dto =  iBookDaoMapper.getBookDetail(bNo);
+
+        return dto;
+
     }
 }

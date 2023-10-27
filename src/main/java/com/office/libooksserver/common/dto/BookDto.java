@@ -12,6 +12,7 @@ public class BookDto {
     private String b_publisher;
     private String b_publish_date;
     private String b_description;
+    private String b_link;
     private int b_stock;
     private int b_state;
     private String b_reg_date;
