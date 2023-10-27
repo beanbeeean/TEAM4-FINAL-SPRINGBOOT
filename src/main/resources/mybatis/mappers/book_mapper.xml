@@ -2,23 +2,28 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.office.libooksserver.common.service.implement.IBookDaoMapper">
+<mapper namespace="com.office.libooksserver.user.service.implement.IBookDaoMapper">
 
     <select id="isBook" resultType="Integer" parameterType="String">
         SELECT count(*) FROM tbl_books WHERE b_isbn = #{bIsbn}
     </select>
 
     <insert id="insertNewBook" >
-         INSERT INTO tbl_books( b_isbn, b_cover, b_title, b_author, b_publisher, b_publish_date, b_description, b_reg_date,  b_mod_date)
-        VALUES (#{b_isbn}, #{b_cover}, #{b_title}, #{b_author}, #{b_publisher}, #{b_publish_date}, #{b_description}, now(), now())
+         INSERT INTO tbl_books( b_category, b_isbn, b_cover, b_title, b_author, b_publisher, b_publish_date, b_description, b_link, b_reg_date,  b_mod_date)
+        VALUES (#{b_category}, #{b_isbn}, #{b_cover}, #{b_title}, #{b_author}, #{b_publisher}, #{b_publish_date}, #{b_description}, #{b_link}, now(), now())
     </insert>
 
     <select id="selectBooks" resultType="Hashmap">
         SELECT * FROM tbl_books
     </select>
 
-    <select id="getBookDetail"  parameterType="Integer" resultType="com.office.libooksserver.common.dto.BookDto">
+    <select id="getBookDetail"  parameterType="Integer" resultType="com.office.libooksserver.user.dto.BookDto">
         SELECT * from tbl_books where b_no = #{bNo}
     </select>
+
+    <insert id="insertCheckoutBook" parameterType="Integer">
+        INSERT INTO tbl_chk_book(b_no, u_no, c_start_date, c_end_date, c_reg_date, c_mod_date)
+        VALUES (#{b_no}, 1, now(), DATE_ADD(now(), INTERVAL 7 DAY), now(), now())
+    </insert>
 
 </mapper>

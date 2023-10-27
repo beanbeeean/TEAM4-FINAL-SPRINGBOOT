@@ -1,10 +1,9 @@
-package com.office.libooksserver.common.service.implement;
+package com.office.libooksserver.user.service.implement;
 
-import com.office.libooksserver.common.dto.BookDto;
+import com.office.libooksserver.user.dto.BookDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface IBookDaoMapper {
@@ -15,4 +14,6 @@ public interface IBookDaoMapper {
     List<BookDto> selectBooks();
 
     BookDto getBookDetail(int bNo);
+
+    int insertCheckoutBook(int bNo);
 }
