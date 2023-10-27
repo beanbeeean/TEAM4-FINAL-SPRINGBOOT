@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.office.libooksserver.login.service.user.UserMapper">
+
+    <select id="findByid" parameterType="long" resultType="com.office.libooksserver.login.service.user.UserDto">
+
+        SELECT * FROM user WHERE id = #{id}
+
+    </select>
+
+    <select id="findByEmail" parameterType="String" resultType="com.office.libooksserver.login.service.user.UserDto">
+
+        SELECT * FROM user WHERE email = #{email}
+
+    </select>
+
+    <select id="existsByEmail" parameterType="String" resultType="Boolean">
+
+        SELECT count(*) FROM user WHERE email = #{email}
+
+    </select>
+
+    <insert id="save" parameterType="com.office.libooksserver.login.service.user.UserDto">
+        INSERT INTO user (email, name, password, provider, role, email_verified, created_date, modified_date)
+        VALUES (#{email}, #{name}, #{password}, #{provider}, #{role}, 0,now(), now())
+    </insert>
+
+    <update id="update" parameterType="com.office.libooksserver.login.service.user.UserDto">
+        UPDATE user SET password = #{password}, modified_date = now() WHERE email = #{email}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM user WHERE id = #{id}
+    </delete>
+</mapper>
