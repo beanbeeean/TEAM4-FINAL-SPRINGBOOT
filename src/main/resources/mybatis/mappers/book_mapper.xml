@@ -26,4 +26,8 @@
         VALUES (#{b_no}, 1, now(), DATE_ADD(now(), INTERVAL 7 DAY), now(), now())
     </insert>
 
+    <update id="decreaseBookStock" parameterType="Integer">
+        UPDATE tbl_books SET b_stock = b_stock -1, b_mod_date = now() WHERE b_no = #{bNo} and b_stock > 0
+    </update>
+
 </mapper>

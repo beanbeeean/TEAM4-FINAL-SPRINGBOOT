@@ -28,79 +28,82 @@ public class BookService {
         log.info("[BookService] insertBooks()");
         log.info("--------------->str: "+str);
 
-        StringBuilder result = new StringBuilder();
+
 
         String key = "ttbtldud43461055001";
 
         try {
-
+            for(int i=1;i<=4;i++){
                 String apiUrl = "http://www.aladin.co.kr/ttb/api/ItemList.aspx?ttbkey=ttbtldud43461055001&QueryType="+
                         str+
-                        "&MaxResults=100&start=1&SearchTarget=Book&Cover=Big&output=js&Version=20131101";
+                        "&MaxResults=50&start=" +i + "&SearchTarget=Book&Cover=Big&output=js&Version=20131101";
 
+                StringBuilder result = new StringBuilder();
+                URL url = new URL(apiUrl);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                BufferedReader br;
 
-            URL url = new URL(apiUrl);
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            BufferedReader br;
+                br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+                String returnLine;
 
-            br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-            String returnLine;
-
-            while ((returnLine = br.readLine()) != null) {
-                result.append(returnLine);
-            }
-
-            JSONParser jsonParser = new JSONParser();
-
-            JSONObject jsonObj = (JSONObject) jsonParser.parse(String.valueOf(result));
-
-            JSONArray array = (JSONArray)jsonObj.get("item");
-            log.info(array.size());
-
-            BookDto bookDto = new BookDto();
-
-            int category = 0;
-            switch (str) {
-                case "ItemNewAll":
-                    category = 1;
-                    break;
-                case "ItemNewSpecial":
-                    category = 2;
-                    break;
-                case "Bestseller":
-                    category = 3;
-                    break;
-            }
-
-            log.info("category-------->"+category);
-
-            for (int i = 0; i < array.size(); i++) {
-                JSONObject jObj = (JSONObject) array.get(i);
-
-                bookDto.setB_title((String) jObj.get("title"));
-                bookDto.setB_cover((String) jObj.get("cover"));
-                bookDto.setB_author((String) jObj.get("author"));
-                bookDto.setB_publish_date((String) jObj.get("pubDate"));
-                bookDto.setB_description((String) jObj.get("description"));
-                bookDto.setB_link((String) jObj.get("link"));
-                bookDto.setB_isbn((String) jObj.get("isbn"));
-                bookDto.setB_publisher((String) jObj.get("publisher"));
-                bookDto.setB_category(category);
-
-                int isBook = -1;
-                isBook = iBookDaoMapper.isBook(bookDto.getB_isbn());
-
-                if(isBook < 1) {
-                    iBookDaoMapper.insertNewBook(bookDto);
+                while ((returnLine = br.readLine()) != null) {
+                    result.append(returnLine);
                 }
-            }
 
-            urlConnection.disconnect();
+                JSONParser jsonParser = new JSONParser();
+
+                JSONObject jsonObj = (JSONObject) jsonParser.parse(String.valueOf(result));
+
+                JSONArray array = (JSONArray)jsonObj.get("item");
+                log.info(array.size());
+
+                BookDto bookDto = new BookDto();
+
+                int category = 0;
+                switch (str) {
+                    case "ItemNewAll":
+                        category = 1;
+                        break;
+                    case "ItemNewSpecial":
+                        category = 2;
+                        break;
+                    case "Bestseller":
+                        category = 3;
+                        break;
+                }
+
+                log.info("category-------->"+category);
+
+                for (int j = 0; j < array.size(); j++) {
+                    JSONObject jObj = (JSONObject) array.get(j);
+
+                    bookDto.setB_title((String) jObj.get("title"));
+                    bookDto.setB_cover((String) jObj.get("cover"));
+                    bookDto.setB_author((String) jObj.get("author"));
+                    bookDto.setB_publish_date((String) jObj.get("pubDate"));
+                    bookDto.setB_description((String) jObj.get("description"));
+                    bookDto.setB_link((String) jObj.get("link"));
+                    bookDto.setB_isbn((String) jObj.get("isbn"));
+                    bookDto.setB_publisher((String) jObj.get("publisher"));
+                    bookDto.setB_category(category);
+
+                    int isBook = -1;
+                    isBook = iBookDaoMapper.isBook(bookDto.getB_isbn());
+
+                    if(isBook < 1) {
+                        iBookDaoMapper.insertNewBook(bookDto);
+                    }
+                }
+
+                urlConnection.disconnect();
+
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     public Map<String, Object> showBooks() {
@@ -128,6 +131,9 @@ public class BookService {
         log.info("[BookService] checkoutBook()");
 
         int result = iBookDaoMapper.insertCheckoutBook(bNo);
+        if (result > 0) {
+            iBookDaoMapper.decreaseBookStock(bNo);
+        }
 
         return result;
     }

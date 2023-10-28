@@ -18,8 +18,8 @@ public class BookController {
 
     @GetMapping({"","/"})
     public Map<String, Object> home() {
-
         log.info("[BookController] home()");
+
         bookService.insertBooks("ItemNewAll");
         bookService.insertBooks("ItemNewSpecial");
         bookService.insertBooks("Bestseller");

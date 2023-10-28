@@ -16,4 +16,6 @@ public interface IBookDaoMapper {
     BookDto getBookDetail(int bNo);
 
     int insertCheckoutBook(int bNo);
+
+    void decreaseBookStock(int bNo);
 }
