@@ -118,6 +118,19 @@ public class BookService {
         return map;
     }
 
+    public Map<String, Object> showBooks(String category) {
+        log.info("[BookService] insertBooks()");
+        log.info("category : " + category);
+
+        Map<String, Object> map = new HashMap<>();
+        List<BookDto> dtos = iBookDaoMapper.selectBooksByCategory(category);
+        log.info("dtos" + dtos.size());
+
+        map.put("dtos",dtos);
+
+        return map;
+    }
+
     public BookDto getBookDetail(int bNo) {
         log.info("[BookService] getBookDetail()");
 
@@ -137,4 +150,14 @@ public class BookService {
 
         return result;
     }
+
+//    public Map<String, Object> searchBooks(String keyword) {
+//        log.info("[BookService] searchBooks()");
+//
+//        Map<String, Object> map = new HashMap<>();
+//        List<BookDto> dtos = iBookDaoMapper.selectBooks(keyword);
+//
+//        map.put("productDtos", dtos);
+//        return map;
+//    }
 }

@@ -20,10 +20,19 @@ public class BookController {
     public Map<String, Object> home() {
         log.info("[BookController] home()");
 
-        bookService.insertBooks("ItemNewAll");
-        bookService.insertBooks("ItemNewSpecial");
-        bookService.insertBooks("Bestseller");
+//        bookService.insertBooks("ItemNewAll");
+//        bookService.insertBooks("ItemNewSpecial");
+//        bookService.insertBooks("Bestseller");
         return bookService.showBooks();
+    }
+
+    @GetMapping("/nav/{category}")
+    @ResponseBody
+    public Map<String, Object> categoryhome(@PathVariable String category) {
+        log.info("[BookController] home()");
+        log.info("category : " + category);
+
+        return bookService.showBooks(category);
     }
 
     @GetMapping("/{id}")
@@ -46,5 +55,16 @@ public class BookController {
 
         return result;
     }
+
+//    @GetMapping("/search{keyword}")
+//    @ResponseBody
+//    public Map<String, Object>  searchBooks(@PathVariable String keyword){
+//        log.info("[BookController] searchBooks()");
+//        log.info("keyword: "+keyword);
+//
+//        Map<String, Object> resultMap = bookService.searchBooks(keyword);
+//
+//        return resultMap;
+//    }
 
 }

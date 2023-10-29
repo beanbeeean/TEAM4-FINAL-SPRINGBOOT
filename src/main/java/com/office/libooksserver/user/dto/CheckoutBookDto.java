@@ -4,12 +4,12 @@ import lombok.Data;
 
 @Data
 public class CheckoutBookDto {
-    private int c_no;
+    private int chk_b_no;
     private int b_no;
     private int u_no;
-    private String c_start_date;
-    private String c_end_date;
-    private int c_state;
-    private String c_mod_date;
-    private String c_reg_date;
+    private String chk_b_start_date;
+    private String chk_b_end_date;
+    private int chk_b_state;
+    private String chk_b_mod_date;
+    private String chk_b_reg_date;
 }

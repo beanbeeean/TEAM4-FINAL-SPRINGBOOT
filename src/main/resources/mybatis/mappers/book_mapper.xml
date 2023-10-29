@@ -17,12 +17,32 @@
         SELECT * FROM tbl_books
     </select>
 
+<!--    <select id="selectBooks" resultType="Hashmap" parameterType="String">-->
+<!--        SELECT * FROM tbl_books WHERE b_category LIKE CONCAT('%', #{keyword}, '%')-->
+<!--    </select>-->
+
+    <select id="selectBooksByCategory" resultType="HashMap" parameterType="String">
+        SELECT * FROM tbl_books
+            <if test="category != 'all'">
+                where
+            </if>
+            <choose>
+                <when test="category == 'new'">
+                    b_category = 2
+                </when>
+                <when test="category == 'bestseller'">
+                    b_category = 3
+                </when>
+            </choose>
+    </select>
+
+
     <select id="getBookDetail"  parameterType="Integer" resultType="com.office.libooksserver.user.dto.BookDto">
         SELECT * from tbl_books where b_no = #{bNo}
     </select>
 
     <insert id="insertCheckoutBook" parameterType="Integer">
-        INSERT INTO tbl_chk_book(b_no, u_no, c_start_date, c_end_date, c_reg_date, c_mod_date)
+        INSERT INTO tbl_chk_book(b_no, u_no, chk_b_start_date, chk_b_end_date, chk_b_reg_date, chk_b_mod_date)
         VALUES (#{b_no}, 1, now(), DATE_ADD(now(), INTERVAL 7 DAY), now(), now())
     </insert>
 
