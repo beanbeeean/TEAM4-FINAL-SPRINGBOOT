@@ -13,9 +13,9 @@
         VALUES (#{b_category}, #{b_isbn}, #{b_cover}, #{b_title}, #{b_author}, #{b_publisher}, #{b_publish_date}, #{b_description}, #{b_link}, now(), now())
     </insert>
 
-    <select id="selectBooks" resultType="Hashmap">
-        SELECT * FROM tbl_books
-    </select>
+<!--    <select id="selectBooks" resultType="Hashmap">-->
+<!--        SELECT * FROM tbl_books-->
+<!--    </select>-->
 
 <!--    <select id="selectBooks" resultType="Hashmap" parameterType="String">-->
 <!--        SELECT * FROM tbl_books WHERE b_category LIKE CONCAT('%', #{keyword}, '%')-->
@@ -23,15 +23,21 @@
 
     <select id="selectBooksByCategory" resultType="HashMap" parameterType="String">
         SELECT * FROM tbl_books
-            <if test="category != 'all'">
-                where
-            </if>
             <choose>
-                <when test="category == 'new'">
-                    b_category = 2
+                <when test="category == 'all' and keyword !=''">
+                    WHERE b_title LIKE CONCAT('%', #{keyword}, '%')
                 </when>
-                <when test="category == 'bestseller'">
-                    b_category = 3
+                <when test="category == 'new' and keyword !=''">
+                    WHERE b_category = 2 AND b_title LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="category == 'new' and keyword ==''">
+                    WHERE b_category = 2
+                </when>
+                <when test="category == 'bestseller' and keyword !=''">
+                    WHERE b_category = 3 AND b_title LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="category == 'bestseller' and keyword ==''">
+                    WHERE b_category = 3
                 </when>
             </choose>
     </select>

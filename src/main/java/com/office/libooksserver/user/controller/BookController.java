@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.Map;
 
 @RestController
@@ -16,32 +17,35 @@ public class BookController {
     @Autowired
     BookService bookService;
 
-    @GetMapping({"","/"})
-    public Map<String, Object> home() {
-        log.info("[BookController] home()");
+//    @GetMapping({"","/"})
+//    public Map<String, Object> home() {
+//        log.info("[BookController] home()");
+//
+////        bookService.insertBooks("ItemNewAll");
+////        bookService.insertBooks("ItemNewSpecial");
+////        bookService.insertBooks("Bestseller");
+//        return bookService.showBooks();
+//    }
 
-//        bookService.insertBooks("ItemNewAll");
-//        bookService.insertBooks("ItemNewSpecial");
-//        bookService.insertBooks("Bestseller");
-        return bookService.showBooks();
-    }
-
-    @GetMapping("/nav/{category}")
+    @GetMapping("/home")
     @ResponseBody
-    public Map<String, Object> categoryhome(@PathVariable String category) {
+    public Map<String, Object> home(@RequestParam(name = "category", required = false) String category,
+                                    @RequestParam(name = "keyword", required = false) String keyword ) {
         log.info("[BookController] home()");
         log.info("category : " + category);
+        log.info("keyword : " + keyword);
 
-        return bookService.showBooks(category);
+        return bookService.showBooks(category, keyword);
+//        return null;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{bNo}")
     @ResponseBody
-    public BookDto getBookByBNo(@PathVariable String id) {
+    public BookDto getBookByBNo(@PathVariable String bNo) {
 
-        log.info("id: "+id);
+        log.info("bNo: "+bNo);
 
-        BookDto bookDto = bookService.getBookDetail(Integer.parseInt(id));
+        BookDto bookDto = bookService.getBookDetail(Integer.parseInt(bNo));
 
         log.info(bookDto);
         return bookDto;

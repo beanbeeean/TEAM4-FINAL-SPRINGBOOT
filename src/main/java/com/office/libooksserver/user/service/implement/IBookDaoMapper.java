@@ -11,9 +11,9 @@ public interface IBookDaoMapper {
 
     int insertNewBook(BookDto bookDto);
 
-    List<BookDto> selectBooks();
+//    List<BookDto> selectBooks();
 //    List<BookDto> selectBooks(String keyword);
-    List<BookDto> selectBooksByCategory(String category);
+    List<BookDto> selectBooksByCategory(String category, String keyword);
 
     BookDto getBookDetail(int bNo);
 

@@ -106,24 +106,13 @@ public class BookService {
 
     }
 
-    public Map<String, Object> showBooks() {
-        log.info("[BookService] insertBooks()");
-
-        Map<String, Object> map = new HashMap<>();
-        List<BookDto> dtos = iBookDaoMapper.selectBooks();
-        log.info("dtos" + dtos.size());
-
-        map.put("dtos",dtos);
-
-        return map;
-    }
-
-    public Map<String, Object> showBooks(String category) {
+    public Map<String, Object> showBooks(String category, String keyword) {
         log.info("[BookService] insertBooks()");
         log.info("category : " + category);
+        log.info("keyword : " + keyword);
 
         Map<String, Object> map = new HashMap<>();
-        List<BookDto> dtos = iBookDaoMapper.selectBooksByCategory(category);
+        List<BookDto> dtos = iBookDaoMapper.selectBooksByCategory(category, keyword);
         log.info("dtos" + dtos.size());
 
         map.put("dtos",dtos);
