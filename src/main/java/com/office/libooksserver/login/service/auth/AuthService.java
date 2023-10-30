@@ -44,6 +44,7 @@ public class AuthService {
     @Autowired
     private HttpServletResponse response;  // HttpServletResponse를 주입받습니다.
 
+
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final CustomTokenProviderService customTokenProviderService;
@@ -52,10 +53,10 @@ public class AuthService {
 
         log.info("whoAmI[]" );
 
-        UserDto user = userMapper.findByEmail(userPrincipal.getEmail());
+        UserDto user = userMapper.findByEmail(userPrincipal.getU_email());
 
         if (user == null) {
-            throw new UsernameNotFoundException("User not found with email : " + userPrincipal.getEmail());
+            throw new UsernameNotFoundException("User not found with email : " + userPrincipal.getU_email());
         }
 
         ApiResponse apiResponse = ApiResponse.builder().check(true).information(user).build();
@@ -67,17 +68,17 @@ public class AuthService {
 
         log.info("delete[]" );
 
-        UserDto user = userMapper.findByid(userPrincipal.getId());
+        UserDto user = userMapper.findByid(userPrincipal.getU_no());
         if (user == null) {
-            throw new UsernameNotFoundException("유저가 올바르지 않습니다. : " + userPrincipal.getId());
+            throw new UsernameNotFoundException("유저가 올바르지 않습니다. : " + userPrincipal.getU_no());
         }
 
-        Token token = tokenMapper.findByUserEmail(userPrincipal.getEmail());
+        Token token = tokenMapper.findByUserEmail(userPrincipal.getU_email());
         if (user == null) {
-            throw new UsernameNotFoundException("토큰이 유효하지 않습니다. : " + userPrincipal.getEmail());
+            throw new UsernameNotFoundException("토큰이 유효하지 않습니다. : " + userPrincipal.getU_email());
         }
 
-        userMapper.delete(user.getId());
+        userMapper.delete(user.getU_no());
         tokenMapper.delete(token);
 
 
@@ -90,9 +91,9 @@ public class AuthService {
 
         log.info("modify[]" );
 
-        UserDto user = userMapper.findByid(userPrincipal.getId());
+        UserDto user = userMapper.findByid(userPrincipal.getU_no());
 
-        boolean passwordCheck = passwordEncoder.matches(passwordChangeRequest.getOldPassword(),user.getPassword());
+        boolean passwordCheck = passwordEncoder.matches(passwordChangeRequest.getOldPassword(),user.getU_password());
         DefaultAssert.isTrue(passwordCheck, "잘못된 비밀번호 입니다.");
 
         boolean newPasswordCheck = passwordChangeRequest.getNewPassword().equals(passwordChangeRequest.getReNewPassword());
@@ -161,11 +162,11 @@ public class AuthService {
         DefaultAssert.isTrue(chk, "해당 이메일이 존재합니다.");
 
         UserDto user = UserDto.builder()
-                        .name(signUpRequest.getName())
-                        .email(signUpRequest.getEmail())
-                        .password(passwordEncoder.encode(signUpRequest.getPassword()))
-                        .provider("local")
-                        .role("ADMIN")
+                        .u_name(signUpRequest.getName())
+                        .u_email(signUpRequest.getEmail())
+                        .u_password(passwordEncoder.encode(signUpRequest.getPassword()))
+                        .u_provider("local")
+                        .u_role("ADMIN")
                         .build();
 
         userMapper.save(user);
@@ -178,7 +179,7 @@ public class AuthService {
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/auth/")
-                .buildAndExpand(user.getId()).toUri();
+                .buildAndExpand(user.getU_no()).toUri();
 
         //ApiResponse 객체를 구축합니다. 이 객체는 응답 메시지와 성공 여부를 포함합니다.
         //.check(true): API의 성공 여부를 나타냅니다. 여기서는 true로 설정하여 성공적임을 표시합니다.
@@ -238,9 +239,16 @@ public class AuthService {
 
         tokenMapper.delete(token);
 
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", token.getRefreshToken())
+                .path("/")               // Path 설정
+                .domain("localhost")     // Domain 설정
+                .maxAge(0) // Max Age 설정 (7일)
+                .httpOnly(true)          // HttpOnly 설정
+                .build();
+
         ApiResponse apiResponse = ApiResponse.builder().check(true).information(Message.builder().message("로그아웃 하였습니다.").build()).build();
 
-        return ResponseEntity.ok(apiResponse);
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString()).body(apiResponse);
     }
 
     private boolean valid(String refreshToken){

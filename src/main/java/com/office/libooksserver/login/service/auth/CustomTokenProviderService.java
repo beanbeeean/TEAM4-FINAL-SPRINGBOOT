@@ -40,14 +40,14 @@ public class CustomTokenProviderService {
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
         String accessToken = Jwts.builder()
-                                .setSubject(Long.toString(userPrincipal.getId()))
+                                .setSubject(Long.toString(userPrincipal.getU_no()))
                                 .setIssuedAt(new Date())
                                 .setExpiration(accessTokenExpiresIn)
                                 .signWith(key, SignatureAlgorithm.HS512)
                                 .compact();
 
         return TokenMapping.builder()
-                        .userEmail(userPrincipal.getEmail())
+                        .userEmail(userPrincipal.getU_email())
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)
                         .build();
@@ -69,7 +69,7 @@ public class CustomTokenProviderService {
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
         String accessToken = Jwts.builder()
-                                .setSubject(userPrincipal.getEmail())
+                                .setSubject(userPrincipal.getU_email())
                                 .setIssuedAt(new Date())
                                 .setExpiration(accessTokenExpiresIn)
                                 .signWith(key, SignatureAlgorithm.HS512)
@@ -83,7 +83,7 @@ public class CustomTokenProviderService {
         System.out.println("refreshToken : " + refreshToken);
 
         return TokenMapping.builder()
-                    .userEmail(userPrincipal.getEmail())
+                    .userEmail(userPrincipal.getU_email())
                     .accessToken(accessToken)
                     .refreshToken(refreshToken)
                     .build();

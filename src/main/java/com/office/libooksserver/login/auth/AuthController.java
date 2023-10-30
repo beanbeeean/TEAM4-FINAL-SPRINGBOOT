@@ -122,7 +122,6 @@ public class AuthController {
         return authService.refresh(tokenRefreshRequest);
     }
 
-
     @Operation(summary = "유저 로그아웃", description = "유저 로그아웃을 수행합니다.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "로그아웃 성공", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Message.class) ) } ),

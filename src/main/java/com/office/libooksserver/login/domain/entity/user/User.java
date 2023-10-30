@@ -70,28 +70,28 @@ import lombok.Data;
 @Data
 public class User {
 
-    private Long id;
-    private String name;
-    private String email;
-    private Boolean emailVerified;
-    private String password;  // 비밀번호를 DTO에 포함시키는 것은 보안상 좋지 않을 수 있습니다. 필요에 따라 제거하는 것을 고려하세요.
-    private Provider provider;
-    private Role role;
-    private String providerId;
+    private Long u_no;
+    private String u_name;
+    private String u_email;
+    private Boolean u_emailVerified;
+    private String u_password;  // 비밀번호를 DTO에 포함시키는 것은 보안상 좋지 않을 수 있습니다. 필요에 따라 제거하는 것을 고려하세요.
+    private Provider u_provider;
+    private Role u_role;
+    private String u_providerId;
     // private String imageUrl;  // 주석 처리된 imageUrl도 필요하다면 포함시킬 수 있습니다.
 
     // 기본 생성자, 모든 필드를 인자로 받는 생성자, getter, setter 등이 포함될 수 있습니다.
     @Builder
     public User(String name, String email, String password, Role role, Provider provider, String providerId){
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.provider = provider;
-        this.providerId = providerId;
+        this.u_name = name;
+        this.u_email = email;
+        this.u_password = password;
+        this.u_role = role;
+        this.u_provider = provider;
+        this.u_providerId = providerId;
     }
 
     public void updateName(String name){
-        this.name = name;
+        this.u_name = name;
     }
 }

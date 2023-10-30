@@ -44,12 +44,14 @@ public class CustomDefaultOAuth2UserService extends DefaultOAuth2UserService{
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes());
         DefaultAssert.isAuthentication(!oAuth2UserInfo.getEmail().isEmpty());
 
+        log.info("processOAuth2User[]2 : " + oAuth2UserInfo.getEmail());
         UserDto userOptional = userMapper.findByEmail(oAuth2UserInfo.getEmail());
         UserDto user;
 
+        log.info("processOAuth2User[]3 : " + userOptional);
         if(userOptional != null) {
             user = userOptional;
-            DefaultAssert.isAuthentication(user.getProvider().equals(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
+            DefaultAssert.isAuthentication(user.getU_provider().equals(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
             user = updateExistingUser(user, oAuth2UserInfo);
         } else {
             user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
@@ -62,12 +64,11 @@ public class CustomDefaultOAuth2UserService extends DefaultOAuth2UserService{
         log.info("registerNewUser[] : xx" );
 
         UserDto user = UserDto.builder()
-                    .name(oAuth2UserInfo.getName())
-                    .email(oAuth2UserInfo.getEmail())
-                    .provider(oAuth2UserRequest.getClientRegistration().getRegistrationId())
-                    .providerId(oAuth2UserInfo.getId())
+                    .u_name(oAuth2UserInfo.getName())
+                    .u_email(oAuth2UserInfo.getEmail())
+                    .u_provider(oAuth2UserRequest.getClientRegistration().getRegistrationId())
 //                    .imageUrl(oAuth2UserInfo.getImageUrl())
-                    .role("USER")
+                    .u_role("USER")
                     .build();
 
         userMapper.save(user);

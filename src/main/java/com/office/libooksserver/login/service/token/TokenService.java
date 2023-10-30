@@ -26,10 +26,10 @@ public class TokenService {
 
         log.info("findByUserEmail[]");
 
-        Token token = tokenMapper.findByUserEmail(userPrincipal.getEmail());
+        Token token = tokenMapper.findByUserEmail(userPrincipal.getU_email());
 
         if (token == null) {
-            throw new UsernameNotFoundException("User not found with email : " + userPrincipal.getEmail());
+            throw new UsernameNotFoundException("User not found with email : " + userPrincipal.getU_email());
         }
 
         ApiResponse apiResponse = ApiResponse.builder().check(true).information(token).build();

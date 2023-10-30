@@ -33,10 +33,10 @@ public class UserService {
 
         log.info("readByUser[]" );
 
-        UserDto user = userMapper.findByid(userPrincipal.getId());
+        UserDto user = userMapper.findByid(userPrincipal.getU_no());
 
         if (user == null) {
-            throw new UsernameNotFoundException("User not found with id : " + userPrincipal.getId());
+            throw new UsernameNotFoundException("User not found with id : " + userPrincipal.getU_no());
         }
 
         ApiResponse apiResponse = ApiResponse.builder().check(true).information(user).build();

@@ -4,15 +4,15 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserMapper {
-    UserDto findByid(Long id);
+    UserDto findByid(Long u_no);
 
-    UserDto findByEmail(String email);
+    UserDto findByEmail(String u_email);
 
     void save(UserDto user);
 
     void update(UserDto user);
 
-    void delete(Long id);
+    void delete(Long u_no);
 
-    Boolean existsByEmail(String email);
+    Boolean existsByEmail(String u_email);
 }
