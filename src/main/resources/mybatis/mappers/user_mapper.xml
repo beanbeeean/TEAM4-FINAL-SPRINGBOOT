@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.office.libooksserver.login.service.user.UserMapper">
+
+    <select id="findByid" parameterType="long" resultType="com.office.libooksserver.login.service.user.UserDto">
+
+        SELECT * FROM tbl_user WHERE u_no = #{u_no}
+
+    </select>
+
+    <select id="findByEmail" parameterType="String" resultType="com.office.libooksserver.login.service.user.UserDto">
+
+        SELECT * FROM tbl_user WHERE u_email = #{u_email}
+
+    </select>
+
+    <select id="existsByEmail" parameterType="String" resultType="Boolean">
+
+        SELECT count(*) FROM tbl_user WHERE u_email = #{u_email}
+
+    </select>
+
+    <insert id="save" parameterType="com.office.libooksserver.login.service.user.UserDto">
+        INSERT INTO tbl_user (u_email, u_name, u_password, u_provider, u_role, u_reg_date, u_mod_date)
+        VALUES (#{u_email}, #{u_name}, #{u_password}, #{u_provider}, #{u_role}, now(), now())
+    </insert>
+
+    <update id="update" parameterType="com.office.libooksserver.login.service.user.UserDto">
+        UPDATE tbl_user SET u_password = #{u_password}, u_mod_date = now() WHERE u_email = #{u_email}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM tbl_user WHERE u_no = #{u_no}
+    </delete>
+</mapper>

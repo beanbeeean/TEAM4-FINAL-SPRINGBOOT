@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.office.libooksserver.login.service.token.TokenMapper">
+
+    <select id="findByUserEmail" parameterType="String" resultType="com.office.libooksserver.login.domain.entity.user.Token">
+
+        SELECT * FROM token WHERE user_email = #{email}
+
+    </select>
+
+    <select id="findByRefreshToken" parameterType="String" resultType="com.office.libooksserver.login.domain.entity.user.Token">
+
+        SELECT * FROM token WHERE refresh_token = #{refreshToken}
+
+    </select>
+
+    <select id="isToken" parameterType="String" resultType="integer">
+
+        SELECT count(*) FROM token WHERE user_email = #{email}
+
+    </select>
+
+    <insert id="save" parameterType="com.office.libooksserver.login.domain.entity.user.Token">
+
+        INSERT INTO token (user_email, refresh_token, created_date, modified_date)
+        VALUES (#{userEmail}, #{refreshToken}, now(), now())
+
+    </insert>
+
+    <update id="update" parameterType="com.office.libooksserver.login.domain.entity.user.Token">
+
+        UPDATE token SET refresh_token = #{refreshToken}, modified_date = now() WHERE user_email = #{userEmail}
+
+    </update>
+
+    <delete id="delete" parameterType="com.office.libooksserver.login.domain.entity.user.Token" >
+
+        DELETE FROM token WHERE user_email = #{email}
+
+    </delete>
+
+
+</mapper>
