@@ -4,8 +4,16 @@
 
 <mapper namespace="com.office.libooksserver.user.service.implement.ICommunityDaoMapper">
 
+    <select id="selectCommunity" resultType="com.office.libooksserver.user.dto.CommunityDto">
+        SELECT * FROM tbl_community ORDER BY c_reg_date desc
+    </select>
+
     <insert id="insertNewCommunity" parameterType="hashMap">
-        insert into tbl_community (u_id, c_category, c_title, c_content, c_reg_date, c_mod_date) values (1, #{category}, #{title}, #{content},  now(), now())
+        INSERT INTO tbl_community (u_no, c_category, c_title, c_content, c_reg_date, c_mod_date) VALUES (1, #{category}, #{title}, #{content},  now(), now())
     </insert>
+
+    <select id="getCommunityDetail"  parameterType="Integer" resultType="com.office.libooksserver.user.dto.CommunityDto">
+        SELECT * from tbl_community where c_no = #{cNo}
+    </select>
 
 </mapper>

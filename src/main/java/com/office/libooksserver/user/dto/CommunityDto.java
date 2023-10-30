@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class CommunityDto {
     private int c_no;
-    private int u_id;
+    private int u_no;
     private int c_category;
     private String c_title;
     private String c_content;
