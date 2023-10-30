@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.office.libooksserver.user.service.implement.ICommunityDaoMapper">
+
+    <insert id="insertNewCommunity" parameterType="hashMap">
+        insert into tbl_community (u_id, c_category, c_title, c_content, c_reg_date, c_mod_date) values (1, #{category}, #{title}, #{content},  now(), now())
+    </insert>
+
+</mapper>
