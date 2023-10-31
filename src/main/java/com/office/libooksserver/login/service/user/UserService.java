@@ -18,6 +18,10 @@ public class UserService {
     @Autowired
     UserMapper userMapper;
 
+    public UserDto myPage(String email){
+        return userMapper.findByEmail(email);
+    }
+
     //private final UserRepository userRepository;
 
     //@RequiredArgsConstructor: Lombok 라이브러리를 사용하여 필수 생성자를 자동으로 생성합니다. 이 생성자는 final로 선언된 필드에 대한 생성자를 자동으로 제공합니다.

@@ -34,8 +34,6 @@ public class AuthController {
     private final AuthService authService;
 
     //    API endpoint를 정의하는 부분으로, Spring Web과 OpenAPI (이전의 Swagger) 애너테이션을 사용하여 작성되었습니다. 자세한 설명은 다음과 같습니다:
-
-    //    API endpoint를 정의하는 부분으로, Spring Web과 OpenAPI (이전의 Swagger) 애너테이션을 사용하여 작성되었습니다. 자세한 설명은 다음과 같습니다:
     //    summary: 이 API의 짧은 요약입니다. 여기서는 "유저 정보 확인"이라고 명시되었습니다.
     //    description: API의 상세한 설명입니다. "현제 접속된 유저정보를 확인합니다."라고 설명되어 있습니다.
     //    @Operation: 해당 API endpoint에 대한 간략한 설명을 제공합니다.

@@ -136,7 +136,7 @@ public class AuthService {
 //        else
 //            tokenMapper.update(token);
 
-        redisService.setValuesWithTimeout(tokenMapping.getUserEmail(),tokenMapping.getRefreshToken(),1209600);
+        //redisService.setValuesWithTimeout(tokenMapping.getUserEmail(),tokenMapping.getRefreshToken(),1209600);
 
         AuthResponse authResponse = AuthResponse.builder().accessToken(tokenMapping.getAccessToken()).build();
 
