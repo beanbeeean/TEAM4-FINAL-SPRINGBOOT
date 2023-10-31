@@ -56,4 +56,13 @@ public class CommunityService {
 
         return result;
     }
+
+    public int deleteCommunity(int id) {
+        log.info("[CommunityService] deleteCommunity()");
+
+        int result = iCommunityDaoMapper.deleteCommunity(id);
+        log.info("result : " + result);
+
+        return result;
+    }
 }
