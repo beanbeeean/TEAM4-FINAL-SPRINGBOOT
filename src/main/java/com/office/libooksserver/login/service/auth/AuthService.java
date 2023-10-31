@@ -11,6 +11,7 @@ import com.office.libooksserver.login.payload.request.auth.SignUpRequest;
 import com.office.libooksserver.login.payload.response.ApiResponse;
 import com.office.libooksserver.login.payload.response.AuthResponse;
 import com.office.libooksserver.login.payload.response.Message;
+import com.office.libooksserver.login.redis.service.RedisService;
 import com.office.libooksserver.login.service.token.TokenMapper;
 import com.office.libooksserver.login.service.user.UserDto;
 import com.office.libooksserver.login.service.user.UserMapper;
@@ -29,7 +30,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 
 @Log4j2
@@ -41,8 +41,8 @@ public class AuthService {
     UserMapper userMapper;
     @Autowired
     TokenMapper tokenMapper;
-    @Autowired
-    private HttpServletResponse response;  // HttpServletResponse를 주입받습니다.
+
+    private final RedisService redisService;
 
 
     private final AuthenticationManager authenticationManager;
@@ -131,10 +131,12 @@ public class AuthService {
 
         int chk = tokenMapper.isToken(signInRequest.getEmail());
 
-        if(chk == 0)
-            tokenMapper.save(token);
-        else
-            tokenMapper.update(token);
+//        if(chk == 0)
+//            tokenMapper.save(token);
+//        else
+//            tokenMapper.update(token);
+
+        redisService.setValuesWithTimeout(tokenMapping.getUserEmail(),tokenMapping.getRefreshToken(),1209600);
 
         AuthResponse authResponse = AuthResponse.builder().accessToken(tokenMapping.getAccessToken()).build();
 

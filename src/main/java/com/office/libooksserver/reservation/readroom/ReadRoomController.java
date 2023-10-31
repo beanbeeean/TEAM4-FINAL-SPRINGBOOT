@@ -24,8 +24,10 @@ public class ReadRoomController {
     @ResponseBody
     public void reservationSeat(@RequestBody ReadRoomDto readRoomDto) {
 
-        System.out.println(readRoomDto.getS_reservation());
-        System.out.println(readRoomDto.getS_name());
-        //readService.reservationSeat();
+        System.out.println(readRoomDto.getRe_room_no());
+        System.out.println(readRoomDto.getRe_reservation());
+        System.out.println(readRoomDto.getRe_seat());
+
+        readService.reservationSeat(readRoomDto);
     }
 }
