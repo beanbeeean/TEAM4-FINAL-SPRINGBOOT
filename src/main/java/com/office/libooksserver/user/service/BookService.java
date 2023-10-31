@@ -107,12 +107,12 @@ public class BookService {
     }
 
     public Map<String, Object> showBooks(String category, String keyword) {
-        log.info("[BookService] insertBooks()");
+        log.info("[BookService] showBooks()");
         log.info("category : " + category);
         log.info("keyword : " + keyword);
 
         Map<String, Object> map = new HashMap<>();
-        List<BookDto> dtos = iBookDaoMapper.selectBooksByCategory(category, keyword);
+        List<BookDto> dtos = iBookDaoMapper.selectBooksByFiltering(category, keyword);
         log.info("dtos" + dtos.size());
 
         map.put("dtos",dtos);

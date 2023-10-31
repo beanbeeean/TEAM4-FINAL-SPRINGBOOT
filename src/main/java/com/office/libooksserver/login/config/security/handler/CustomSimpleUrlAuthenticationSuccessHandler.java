@@ -77,7 +77,7 @@ public class CustomSimpleUrlAuthenticationSuccessHandler extends SimpleUrlAuthen
 //            tokenMapper.update(token);
 
 
-        redisService.setValuesWithTimeout(tokenMapping.getUserEmail(),tokenMapping.getRefreshToken(),1209600);
+        //redisService.setValuesWithTimeout(tokenMapping.getUserEmail(),tokenMapping.getRefreshToken(),1209600);
 
         Cookie refreshToken = new Cookie("refreshToken", tokenMapping.getRefreshToken());
         refreshToken.setPath("/");
