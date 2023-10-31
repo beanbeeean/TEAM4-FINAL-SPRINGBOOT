@@ -13,7 +13,7 @@ public interface IBookDaoMapper {
 
 //    List<BookDto> selectBooks();
 //    List<BookDto> selectBooks(String keyword);
-    List<BookDto> selectBooksByCategory(String category, String keyword);
+    List<BookDto> selectBooksByFiltering(String category, String keyword);
 
     BookDto getBookDetail(int bNo);
 

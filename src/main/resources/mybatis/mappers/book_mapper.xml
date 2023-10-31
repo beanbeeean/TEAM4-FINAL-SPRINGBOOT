@@ -21,7 +21,7 @@
 <!--        SELECT * FROM tbl_books WHERE b_category LIKE CONCAT('%', #{keyword}, '%')-->
 <!--    </select>-->
 
-    <select id="selectBooksByCategory" resultType="HashMap" parameterType="String">
+    <select id="selectBooksByFiltering" resultType="HashMap" parameterType="String">
         SELECT * FROM tbl_books
             <choose>
                 <when test="category == 'all' and keyword !=''">

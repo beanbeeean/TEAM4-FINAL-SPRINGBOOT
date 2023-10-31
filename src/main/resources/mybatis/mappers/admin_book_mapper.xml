@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.office.libooksserver.admin.service.implement.IAdminBookDaoMapper">
+
+    <select id="selectBooksByFiltering" resultType="HashMap" parameterType="String">
+        SELECT * FROM tbl_books
+        <choose>
+            <when test="category == 'all' and keyword !=''">
+                WHERE b_title LIKE CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test="category == 'new' and keyword !=''">
+                WHERE b_category = 2 AND b_title LIKE CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test="category == 'new' and keyword ==''">
+                WHERE b_category = 2
+            </when>
+            <when test="category == 'bestseller' and keyword !=''">
+                WHERE b_category = 3 AND b_title LIKE CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test="category == 'bestseller' and keyword ==''">
+                WHERE b_category = 3
+            </when>
+        </choose>
+    </select>
+
+    <select id="selectByChkUserList" resultType="HashMap" parameterType="Integer">
+        SELECT * FROM tbl_chk_book WHERE b_no = #{bNo}
+    </select>
+
+    <update id="updateBookInfo" parameterType="Integer">
+        UPDATE tbl_books SET b_state = #{state}, b_stock = #{stock}, b_mod_date = now() WHERE b_no = #{no}
+    </update>
+</mapper>
