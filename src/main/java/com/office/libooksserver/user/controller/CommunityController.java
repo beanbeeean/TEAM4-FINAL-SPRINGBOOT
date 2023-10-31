@@ -52,4 +52,21 @@ public class CommunityController {
         log.info(communityDto);
         return communityDto;
     }
+
+    @GetMapping("/community_modify/{id}")
+    @ResponseBody
+    public Object modifyCommunity(@PathVariable int id,
+                                  @RequestParam(name = "selection", required = false) int category,
+                                 @RequestParam(name = "title", required = false) String title,
+                                 @RequestParam(name = "content", required = false) String content
+    ) {
+        log.info("[CommunityController] modifyCommunity()");
+        log.info("category" + category);
+        log.info("title" + title);
+        log.info("content" + content);
+
+        int result = communityService.modifyCommunity(id, category, title, content);
+
+        return result;
+    }
 }

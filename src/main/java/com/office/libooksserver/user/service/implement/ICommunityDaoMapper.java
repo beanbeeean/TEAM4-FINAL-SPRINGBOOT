@@ -11,5 +11,9 @@ public interface ICommunityDaoMapper {
     List<CommunityDto> selectCommunity();
     int insertNewCommunity(int category, String title, String content);
 
+    void updateCommunityHit(int cNo);
     CommunityDto getCommunityDetail(int cNo);
+
+    int updateCommunity(int id, int category, String title, String content);
+
 }

@@ -42,8 +42,18 @@ public class CommunityService {
     public CommunityDto getCommunityDetail(int cNo) {
         log.info("[CommunityService] getCommunityDetail()");
 
+        iCommunityDaoMapper.updateCommunityHit(cNo);
         CommunityDto dto =  iCommunityDaoMapper.getCommunityDetail(cNo);
 
         return dto;
+    }
+
+    public int modifyCommunity(int id, int category, String title, String content) {
+        log.info("[CommunityService] modifyCommunity()");
+
+        int result = iCommunityDaoMapper.updateCommunity(id, category, title, content);
+        log.info("result : " + result);
+
+        return result;
     }
 }
