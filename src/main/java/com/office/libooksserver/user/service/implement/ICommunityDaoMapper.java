@@ -16,4 +16,5 @@ public interface ICommunityDaoMapper {
 
     int updateCommunity(int id, int category, String title, String content);
 
+    int deleteCommunity(int id);
 }

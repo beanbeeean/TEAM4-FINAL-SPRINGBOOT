@@ -24,4 +24,8 @@
         UPDATE tbl_community SET c_category = #{category}, c_title = #{title}, c_content = #{content}, c_mod_date = now() WHERE c_no = #{id}
     </update>
 
+    <delete id="deleteCommunity" parameterType="Integer">
+        DELETE FROM tbl_community WHERE c_no = #{id}
+    </delete>
+
 </mapper>
