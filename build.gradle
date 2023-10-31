@@ -50,6 +50,22 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'it.ozimov:embedded-redis:0.7.2'
+
+    // DynamoDB
+    implementation platform('com.amazonaws:aws-java-sdk-bom:1.11.1000')
+    implementation 'com.amazonaws:aws-java-sdk-dynamodb'
+
+    // websocket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    // sockjs
+    implementation 'org.webjars:sockjs-client:1.5.1'
+// stomp
+    implementation 'org.webjars:stomp-websocket:2.3.4'
+// gson
+    implementation 'com.google.code.gson:gson:2.9.0'
+
+
 }
 
 tasks.named('test') {
