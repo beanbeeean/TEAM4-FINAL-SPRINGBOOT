@@ -9,6 +9,7 @@ import com.office.libooksserver.login.redis.service.RedisService;
 import com.office.libooksserver.login.repository.auth.CustomAuthorizationRequestRepository;
 import com.office.libooksserver.login.service.auth.CustomTokenProviderService;
 import com.office.libooksserver.login.service.token.TokenMapper;
+import com.office.libooksserver.login.service.user.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ public class CustomSimpleUrlAuthenticationSuccessHandler extends SimpleUrlAuthen
 
     @Autowired
     TokenMapper tokenMapper;
+    @Autowired
+    UserMapper userMapper;
 
     private final RedisService redisService;
     private final CustomTokenProviderService customTokenProviderService;
@@ -76,8 +79,7 @@ public class CustomSimpleUrlAuthenticationSuccessHandler extends SimpleUrlAuthen
 //        else
 //            tokenMapper.update(token);
 
-
-        redisService.setValuesWithTimeout(tokenMapping.getUserEmail(),tokenMapping.getRefreshToken(),1209600);
+        //redisService.setValuesWithTimeout(tokenMapping.getUserEmail(),tokenMapping.getRefreshToken(),1209600);
 
         Cookie refreshToken = new Cookie("refreshToken", tokenMapping.getRefreshToken());
         refreshToken.setPath("/");

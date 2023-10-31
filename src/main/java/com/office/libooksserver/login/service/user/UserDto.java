@@ -9,7 +9,7 @@ public class UserDto {
     private String u_reg_date;
     private String u_mod_date;
     private String u_email;
-    private Boolean u_emailVerified;
+    private Boolean u_address;
     private String u_image;
     private String u_name;
     private String u_password;

@@ -44,11 +44,10 @@ public class CustomDefaultOAuth2UserService extends DefaultOAuth2UserService{
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes());
         DefaultAssert.isAuthentication(!oAuth2UserInfo.getEmail().isEmpty());
 
-        log.info("processOAuth2User[]2 : " + oAuth2UserInfo.getEmail());
         UserDto userOptional = userMapper.findByEmail(oAuth2UserInfo.getEmail());
         UserDto user;
 
-        log.info("processOAuth2User[]3 : " + userOptional);
+        log.info("userOptional[] : " + userOptional);
         if(userOptional != null) {
             user = userOptional;
             DefaultAssert.isAuthentication(user.getU_provider().equals(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
@@ -56,6 +55,7 @@ public class CustomDefaultOAuth2UserService extends DefaultOAuth2UserService{
         } else {
             user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
         }
+
         return UserPrincipal.create(user, oAuth2User.getAttributes());
     }
 
@@ -72,6 +72,7 @@ public class CustomDefaultOAuth2UserService extends DefaultOAuth2UserService{
                     .build();
 
         userMapper.save(user);
+
         return user;
     }
 
