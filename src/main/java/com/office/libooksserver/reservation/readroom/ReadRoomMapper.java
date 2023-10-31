@@ -7,5 +7,5 @@ import java.util.List;
 @Mapper
 public interface ReadRoomMapper {
     List<ReadRoomDto> checkSeat();
-    void reservationSeat();
+    void reservationSeat(ReadRoomDto readRoomDto);
 }

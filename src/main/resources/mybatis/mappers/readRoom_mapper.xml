@@ -6,16 +6,14 @@
 
     <select id="checkSeat" resultType="com.office.libooksserver.reservation.readroom.ReadRoomDto">
 
-        SELECT * FROM tbl_seat
+        SELECT * FROM tbl_reading_room
 
     </select>
 
-    <insert id="reservationSeat" >
+    <insert id="reservationSeat" parameterType="com.office.libooksserver.reservation.readroom.ReadRoomDto">
 
-        INSERT INTO tbl_seat (re_room_no, s_name, s_reservation)
-        VALUES (#{userEmail}, #{refreshToken},now())
+        UPDATE tbl_reading_room SET re_reservation = #{re_reservation} where re_room_no = #{re_room_no} and re_seat = #{re_seat}
 
     </insert>
-
 
 </mapper>

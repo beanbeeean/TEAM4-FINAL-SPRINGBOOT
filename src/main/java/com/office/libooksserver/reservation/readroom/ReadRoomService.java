@@ -13,6 +13,6 @@ public class ReadRoomService {
     public List<ReadRoomDto> checkSeat(){
         return readMapper.checkSeat();
     }
-    public void reservationSeat(){ readMapper.reservationSeat(); }
+    public void reservationSeat(ReadRoomDto readRoomDto){ readMapper.reservationSeat(readRoomDto); }
 
 }

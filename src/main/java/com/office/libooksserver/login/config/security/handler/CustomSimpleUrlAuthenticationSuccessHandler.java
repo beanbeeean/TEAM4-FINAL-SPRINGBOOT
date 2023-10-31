@@ -5,6 +5,7 @@ import com.office.libooksserver.login.config.security.OAuth2Config;
 import com.office.libooksserver.login.config.security.util.CustomCookie;
 import com.office.libooksserver.login.domain.entity.user.Token;
 import com.office.libooksserver.login.domain.mapping.TokenMapping;
+import com.office.libooksserver.login.redis.service.RedisService;
 import com.office.libooksserver.login.repository.auth.CustomAuthorizationRequestRepository;
 import com.office.libooksserver.login.service.auth.CustomTokenProviderService;
 import com.office.libooksserver.login.service.token.TokenMapper;
@@ -34,6 +35,7 @@ public class CustomSimpleUrlAuthenticationSuccessHandler extends SimpleUrlAuthen
     @Autowired
     TokenMapper tokenMapper;
 
+    private final RedisService redisService;
     private final CustomTokenProviderService customTokenProviderService;
     private final OAuth2Config oAuth2Config;
     private final CustomAuthorizationRequestRepository customAuthorizationRequestRepository;
@@ -69,10 +71,13 @@ public class CustomSimpleUrlAuthenticationSuccessHandler extends SimpleUrlAuthen
 
         int chk = tokenMapper.isToken(tokenMapping.getUserEmail());
 
-        if(chk == 0)
-            tokenMapper.save(token);
-        else
-            tokenMapper.update(token);
+//        if(chk == 0)
+//            tokenMapper.save(token);
+//        else
+//            tokenMapper.update(token);
+
+
+        redisService.setValuesWithTimeout(tokenMapping.getUserEmail(),tokenMapping.getRefreshToken(),1209600);
 
         Cookie refreshToken = new Cookie("refreshToken", tokenMapping.getRefreshToken());
         refreshToken.setPath("/");
