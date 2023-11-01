@@ -5,6 +5,7 @@ import com.office.libooksserver.user.dto.BookDto;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +48,16 @@ public class AdminBookService {
         log.info("[AdminBookService] changeBookInfo()");
 
         int result = iAdminBookDaoMapper.updateBookInfo(no, stock, state);
+        log.info("result : "+ result );
+
+        return result;
+    }
+
+    public Object changeChkBookState(@PathVariable int no) {
+        log.info("[AdminBookService] changeChkBookState()");
+        log.info("no" + no);
+
+        int result = iAdminBookDaoMapper.changeChkBookState(no);
         log.info("result : "+ result );
 
         return result;

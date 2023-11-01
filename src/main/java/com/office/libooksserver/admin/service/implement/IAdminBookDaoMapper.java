@@ -12,4 +12,6 @@ public interface IAdminBookDaoMapper {
     List<BookDto> selectByChkUserList(int bNo);
 
     int updateBookInfo(int no, int stock, int state);
+
+    int changeChkBookState(int no);
 }

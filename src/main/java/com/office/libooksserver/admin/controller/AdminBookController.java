@@ -50,5 +50,15 @@ public class AdminBookController {
 
         return adminBookService.changeBookInfo(no, stock, state);
     }
+
+    @GetMapping("/return_book{no}")
+    @ResponseBody
+    public Object changeChkBookState(@PathVariable int no) {
+
+        log.info("[AdminBookController] changeChkBookState()");
+        log.info("no : " + no);
+
+        return adminBookService.changeChkBookState(no);
+    }
 }
 

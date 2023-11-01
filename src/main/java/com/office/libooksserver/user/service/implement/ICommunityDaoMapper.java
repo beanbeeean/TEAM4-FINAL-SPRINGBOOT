@@ -9,7 +9,7 @@ import java.util.List;
 public interface ICommunityDaoMapper {
 
     List<CommunityDto> selectCommunity();
-    int insertNewCommunity(int category, String title, String content);
+    int insertNewCommunity(int category, String title, String content, String uMail);
 
     void updateCommunityHit(int cNo);
     CommunityDto getCommunityDetail(int cNo);
