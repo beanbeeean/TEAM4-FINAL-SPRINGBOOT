@@ -36,7 +36,7 @@ public class ChatService {
             ChatRoomDto chatRoom = new ChatRoomDto().create(roomName, Integer.parseInt(userMaxCount)); // 채팅룸 이름으로 채팅 룸 생성 후
 
             DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
-            int result = iChatMapper.insertChatRoomForUser(userName, chatRoom.getRoomId(), LocalDateTime.now().toString());
+            int result = iChatMapper.insertChatRoomForUser(userName, chatRoom.getRoomId(), "0");
 
                 if(result > 0){
                     Thread.sleep(1000);
@@ -77,28 +77,26 @@ public class ChatService {
         return chatRoom;
     }
 
-    public long getUserJoinDate(String roomId, String u_mail){
-        String joinDate = iChatMapper.getUserJoinDate(roomId,u_mail);
-        String str = joinDate.replaceAll(":", "").replaceAll("-","").replaceAll(" ","");
-        return Long.parseLong(str);
+    public int getUserJoinIdx(String roomId, String u_mail){
+        return Integer.parseInt(iChatMapper.getUserJoinIdx(roomId,u_mail));
     }
 
     // 채팅방 인원+1
     public int plusUserCnt(String roomId, String u_mail){
 
-            int result = 0;
+        int result = 0;
+        DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
+        ChatRoomDto chatRoom = mapper.load(ChatRoomDto.class, roomId);
 
         try{
             result = iChatMapper.isAlreadyJoined(roomId, u_mail);
             if(result < 1){
-                DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
-                ChatRoomDto chatRoom = mapper.load(ChatRoomDto.class, roomId);
                 if(chatRoom.getUserMaxCount() == chatRoom.getUserCount()){
                     result = -1;
                     return result;
                 }else{
-                    int insertSQL = iChatMapper.insertChatRoomForUser(u_mail,roomId, LocalDateTime.now().toString());
-                    Thread.sleep(100);
+                    int insertSQL = iChatMapper.insertChatRoomForUser(u_mail,roomId, String.valueOf(Integer.parseInt(chatRoom.getChat().get(chatRoom.getChat().size()-1).get("idx")) + 1));
+                    Thread.sleep(1000);
                     if(insertSQL > 0){
                         chatRoom.setUserCount(chatRoom.getUserCount()+1);
                         mapper.save(chatRoom);
@@ -120,28 +118,39 @@ public class ChatService {
         DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
         ChatRoomDto chatRoom = mapper.load(ChatRoomDto.class, chatDto.getRoomId());
         ArrayList<Map<String,String>> oriMap = chatRoom.getChat();
-        Map<String, String> map = new HashMap<>();
-        // result == 1 ? 날짜 출력 : 저장만
-//        if(oriMap.size() < 2 || oriMap.get(oriMap.size()-1).get("date").equals(LocalDate.now().toString())){
-//            map.put("user", "ADMIN");
-//            map.put("msg", "");
-//            map.put("date",LocalDate.now().toString());
-//            map.put("time", LocalTime.now().toString());
-//            map.put("type", ChatDto.MessageType.NOTICE.toString());
-//
-//            oriMap.add(map);
-//            chatRoom.setChat(oriMap);
-//            mapper.save(chatRoom);
-//            map.clear();
-//        }
 
-        map.put("user", chatDto.getSender());
-        map.put("msg", chatDto.getMessage());
-        map.put("date", LocalDate.now().toString());
-        map.put("time", LocalTime.now().toString());
-        map.put("type", chatDto.getType().toString());
+        if(!oriMap.get(chatRoom.getChat().size()-1).get("date").equals(LocalDate.now().toString())){
+            Map<String, String> map = new HashMap<>();
 
-        oriMap.add(map);
+            map.put("idx", String.valueOf(Integer.parseInt(oriMap.get(chatRoom.getChat().size()-1).get("idx")) + 1));
+            map.put("user", "ADMIN");
+            map.put("msg", (LocalDate.now().toString().substring(0,4) + "년 " +  LocalDate.now().toString().substring(5,7) + "월 " + LocalDate.now().toString().substring(8,10)+"일"));
+            map.put("date", LocalDate.now().toString());
+            map.put("time", LocalTime.now().toString());
+            map.put("type", ChatDto.MessageType.NOTICE.toString());
+            oriMap.add(map);
+            chatRoom.setChat(oriMap);
+            mapper.save(chatRoom);
+        }
+
+
+        Map<String, String> talkMap = new HashMap<>();
+        String half = "";
+        if(LocalTime.now().getHour() / 12 >= 1){
+            half = "PM";
+        }else {
+            half = "AM";
+        }
+        String time = (half + " " + (LocalTime.now().getHour()%12 < 10 ? "0"+ String.valueOf(LocalTime.now().getHour()%12): LocalTime.now().getHour()%12) + ":" + (LocalTime.now().getMinute() < 10 ? "0" + String.valueOf(LocalTime.now().getMinute()) : LocalTime.now().getMinute()));
+
+        talkMap.put("idx",String.valueOf(Integer.parseInt(oriMap.get(chatRoom.getChat().size()-1).get("idx")) + 1) );
+        talkMap.put("user", chatDto.getSender());
+        talkMap.put("msg", chatDto.getMessage());
+        talkMap.put("date", LocalDate.now().toString());
+        talkMap.put("time", time);
+        talkMap.put("type", chatDto.getType().toString());
+
+        oriMap.add(talkMap);
         chatRoom.setChat(oriMap);
         mapper.save(chatRoom);
 

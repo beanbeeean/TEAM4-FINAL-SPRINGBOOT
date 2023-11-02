@@ -7,7 +7,7 @@ import java.util.List;
 @Mapper
 public interface IChatMapper {
 
-    int insertChatRoomForUser(String u_mail, String roomId, String now);
+    int insertChatRoomForUser(String u_mail, String roomId, String idx);
 
     List<String> getUsersChatRooms(String u_mail);
 
@@ -15,5 +15,5 @@ public interface IChatMapper {
 
     int deleteChatRoomForUser(String u_mail, String roomId);
 
-    String getUserJoinDate(String roomId, String u_mail);
+    String getUserJoinIdx(String roomId, String u_mail);
 }

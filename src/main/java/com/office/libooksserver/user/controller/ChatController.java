@@ -46,22 +46,9 @@ public class ChatController {
         if(result == 0){
             headerAccessor.getSessionAttributes().put("userUUID", chat.getSender());
             headerAccessor.getSessionAttributes().put("roomId", chat.getRoomId());
-            ChatRoomDto chatRoom = chatService.findRoomByRoomId(chat.getRoomId());
-
-            if(chatRoom.getChat().size() < 2){
-                chat.setMessage(chatRoom.getChat().get(0).get("msg"));
-                chat.setSender(chatRoom.getChat().get(0).get("user"));
-                chat.setDate(chatRoom.getChat().get(0).get("date"));
-                chat.setTime(chatRoom.getChat().get(0).get("time"));
-                chat.setFirst(true);
-
-                System.out.println("여기됐다");
-                template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
-            }
-
 
             chat.setType(ChatDto.MessageType.ENTER);
-            chat.setMessage(user + " 님 입장!!");
+            chat.setMessage(user + " 님이 채팅방에 입장하셨습니다.");
             chat.setSender("ADMIN");
             chat.setFirst(true);
 
@@ -74,18 +61,15 @@ public class ChatController {
         } else if (result > 0) { // 개설된 채팅방에 입장 시
 
             ChatRoomDto chatRoom = chatService.findRoomByRoomId(chat.getRoomId());
-            long userJoinDate = chatService.getUserJoinDate(chat.getRoomId(), chat.getSender());
+            int userJoinIdx = chatService.getUserJoinIdx(chat.getRoomId(), chat.getSender());
 
             headerAccessor.getSessionAttributes().put("userUUID", chat.getSender());
             headerAccessor.getSessionAttributes().put("roomId", chat.getRoomId());
             for (Map<String, String> ct: chatRoom.getChat()) {
-                int idx = ct.get("time").indexOf(".");
-               long chatDate = Long.parseLong(ct.get("date").replaceAll("-","") + ct.get("time").substring(0,idx).replaceAll(":",""));
-                System.out.println("chatDate ===>> " + chatDate);
-                System.out.println("userJOINDAte =====> " + userJoinDate);
-               if(chatDate < userJoinDate){
-                   continue;
-               }
+
+                if(userJoinIdx > Integer.parseInt(ct.get("idx"))){
+                    continue;
+                }
                 chat.setMessage(ct.get("msg"));
                 chat.setSender(ct.get("user"));
                 chat.setDate(ct.get("date"));
@@ -94,9 +78,10 @@ public class ChatController {
                 chat.setFirst(false);
                 template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
                 System.out.println("chat : " + chat);
-
             }
-
+        }else{
+            chat.setType(ChatDto.MessageType.REJECT);
+            template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
         }
     }
 
@@ -106,15 +91,13 @@ public class ChatController {
         int result = chatService.minusUserCnt(chat.getRoomId(), chat.getSender());
 
         if(result > 0){
-            ChatDto leaveChat = ChatDto.builder()
-                    .type(ChatDto.MessageType.LEAVE)
-                    .sender("ADMIN")
-                    .message(chat.getSender() + " 님 퇴장!!")
-                    .build();
 
-            template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), leaveChat);
+            chat.setType(ChatDto.MessageType.LEAVE);
+            chat.setMessage(chat.getSender() + " 님이 채팅방에서 나가셨습니다.");
+            chat.setSender("ADMIN");
+            template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
+            chatService.saveChatList(chat);
         }
-
 
     }
 
@@ -122,8 +105,25 @@ public class ChatController {
     @MessageMapping("/chat/sendMessage")
     public void sendMessage(@Payload ChatDto chat) {
         log.info("CHAT {}", chat);
-        chat.setMessage(chat.getMessage());
+        String user = chat.getSender();
+        ChatDto.MessageType type = chat.getType();
+        String msg = chat.getMessage();
+
+        ChatRoomDto chatRoom = chatService.findRoomByRoomId(chat.getRoomId());
+        String lastDay = chatRoom.getChat().get(chatRoom.getChat().size() -1).get("date");
+        if(!lastDay.equals(LocalDate.now().toString())){
+            chat.setMessage((LocalDate.now().toString().substring(0,4) + "년 " +  LocalDate.now().toString().substring(5,7) + "월 " + LocalDate.now().toString().substring(8,10)+"일"));
+            chat.setSender("ADMIN");
+            chat.setType(ChatDto.MessageType.NOTICE);
+            template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
+        }
+
+
+        chat.setSender(user);
+        chat.setMessage(msg);
         chat.setDate(LocalDate.now().toString());
+        chat.setType(type);
+        chatService.saveChatList(chat);
         String half = "";
         if(LocalTime.now().getHour() / 12 >= 1){
             half = "PM";
@@ -131,7 +131,6 @@ public class ChatController {
             half = "AM";
         }
         chat.setTime(half + " " + (LocalTime.now().getHour()%12 < 10 ? "0"+ String.valueOf(LocalTime.now().getHour()%12): LocalTime.now().getHour()%12) + ":" + (LocalTime.now().getMinute() < 10 ? "0" + String.valueOf(LocalTime.now().getMinute()) : LocalTime.now().getMinute()));
-        chatService.saveChatList(chat);
         template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
     }
 

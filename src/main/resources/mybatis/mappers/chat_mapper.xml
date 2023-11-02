@@ -5,7 +5,7 @@
 <mapper namespace="com.office.libooksserver.user.service.implement.IChatMapper">
 
     <insert id="insertChatRoomForUser" parameterType="String">
-        INSERT INTO tbl_user_chat(u_mail, room_id, uc_reg_date) VALUES(#{param1}, #{param2}, #{param3})
+        INSERT INTO tbl_user_chat(u_mail, room_id, join_idx, uc_reg_date) VALUES(#{param1}, #{param2}, #{param3}, now())
     </insert>
 
     <select id="getUsersChatRooms" parameterType="String" resultType="String">
@@ -20,7 +20,7 @@
         DELETE FROM tbl_user_chat WHERE u_mail = #{param1} AND room_id = #{param2}
     </delete>
 
-    <select id="getUserJoinDate" parameterType="String" resultType="String">
-        SELECT uc_reg_date FROM tbl_user_chat WHERE room_id = #{param1} AND u_mail = #{param2}
+    <select id="getUserJoinIdx" parameterType="String" resultType="String">
+        SELECT join_idx FROM tbl_user_chat WHERE room_id = #{param1} AND u_mail = #{param2}
     </select>
 </mapper>
