@@ -12,6 +12,9 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource(value = { "classpath:swagger/springdoc.properties" })
 public class LibooksServerApplication {
 
+    static {
+        System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+    }
     public static void main(String[] args) {
         SpringApplication.run(LibooksServerApplication.class, args);
     }
