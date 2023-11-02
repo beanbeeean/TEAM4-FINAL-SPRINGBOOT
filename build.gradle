@@ -50,6 +50,9 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'it.ozimov:embedded-redis:0.7.2'
+
+    //spring-cloud-starter-aws
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 tasks.named('test') {

@@ -8,9 +8,13 @@ public interface UserMapper {
 
     UserDto findByEmail(String u_email);
 
-    void save(UserDto user);
+    void userUpdate(UserDto userDto);
 
-    void update(UserDto user);
+    void imgUpdate(String u_email,String u_image);
+
+    void save(UserDto userDto);
+
+    void update(UserDto userDto);
 
     void delete(Long u_no);
 

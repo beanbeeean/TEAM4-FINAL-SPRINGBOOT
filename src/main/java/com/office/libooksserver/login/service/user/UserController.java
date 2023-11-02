@@ -1,36 +1,56 @@
 package com.office.libooksserver.login.service.user;
 
+import com.office.libooksserver.common.s3.S3ServiceImpl;
+import com.office.libooksserver.common.s3.S3Uploader;
 import com.office.libooksserver.login.config.security.token.CurrentUser;
 import com.office.libooksserver.login.config.security.token.UserPrincipal;
 import io.swagger.v3.oas.annotations.Parameter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/user/*")
+@RequiredArgsConstructor
 public class UserController {
 
     @Autowired
     UserService userService;
 
+    @Autowired
+    S3ServiceImpl s3ServiceImpl;
+
+    private final S3Uploader s3Uploader;
+
     @GetMapping("/myPage")
     public ResponseEntity<?> myPage(@Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal) {
-
-        System.out.println("userService.myPage(email) : " + userService.myPage(userPrincipal.getU_email()));
 
         return ResponseEntity.ok(userService.myPage(userPrincipal.getU_email()));
     }
 
-    @GetMapping("/userUpdate")
-    public ResponseEntity<?> userUpdate() {
+    @PostMapping("/userUpdate")
+    public ResponseEntity<?> userUpdate(@RequestBody UserDto userDto) {
 
-        //System.out.println("userUpdate : " + userPrincipal);
-        //System.out.println("test : " + test);
+        System.out.println("userDto: " + userDto);
+        userService.userUpdate(userDto);
 
-        return ResponseEntity.ok("asd");
+        return ResponseEntity.ok(userService.myPage(userDto.getU_email()));
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<?> upload(@Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal, @RequestParam(value="file", required=false) MultipartFile file) throws IOException {
+
+        System.out.println("file: " + file);
+        String url = s3ServiceImpl.createTeam(userPrincipal.getU_email(), file);
+        userService.imgUpdate(userPrincipal.getU_email(), url);
+
+        return new ResponseEntity(null, HttpStatus.OK);
     }
 
 }
