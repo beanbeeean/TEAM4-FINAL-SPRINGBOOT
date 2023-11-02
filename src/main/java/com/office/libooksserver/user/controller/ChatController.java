@@ -15,6 +15,9 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Map;
 
 @Slf4j
@@ -33,35 +36,52 @@ public class ChatController {
     @MessageMapping("/chat/enterUser")
     public void enterUser(@Payload ChatDto chat, SimpMessageHeaderAccessor headerAccessor) {
         System.out.println("엔터유저");
-        // 채팅방 유저+1
 
+        String user = chat.getSender();
+        // 채팅방 유저+1
         int result = chatService.plusUserCnt(chat.getRoomId(), chat.getSender());
         chat.setCurrentUser(chat.getSender());
-        // 채팅방에 유저 추가 및 UserUUID 반환
-//        String userUUID = repository.addUser(chat.getRoomId(), chat.getSender());
 
-        // 반환 결과를 socket session 에 userUUID 로 저장
-
-
+        // 채팅방 유저 개설, 입장 시
         if(result == 0){
             headerAccessor.getSessionAttributes().put("userUUID", chat.getSender());
             headerAccessor.getSessionAttributes().put("roomId", chat.getRoomId());
+
+            chat.setType(ChatDto.MessageType.ENTER);
+            chat.setMessage(user + " 님이 채팅방에 입장하셨습니다.");
             chat.setSender("ADMIN");
-            chat.setMessage(chat.getSender() + " 님 입장!!");
-            template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
+            chat.setFirst(true);
 
             chatService.saveChatList(chat);
-        } else if (result > 0) {
+
+
+            template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
+
+
+        } else if (result > 0) { // 개설된 채팅방에 입장 시
+
             ChatRoomDto chatRoom = chatService.findRoomByRoomId(chat.getRoomId());
+            int userJoinIdx = chatService.getUserJoinIdx(chat.getRoomId(), chat.getSender());
+
             headerAccessor.getSessionAttributes().put("userUUID", chat.getSender());
             headerAccessor.getSessionAttributes().put("roomId", chat.getRoomId());
             for (Map<String, String> ct: chatRoom.getChat()) {
+
+                if(userJoinIdx > Integer.parseInt(ct.get("idx"))){
+                    continue;
+                }
                 chat.setMessage(ct.get("msg"));
                 chat.setSender(ct.get("user"));
+                chat.setDate(ct.get("date"));
                 chat.setTime(ct.get("time"));
-                template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
-            }
 
+                chat.setFirst(false);
+                template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
+                System.out.println("chat : " + chat);
+            }
+        }else{
+            chat.setType(ChatDto.MessageType.REJECT);
+            template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
         }
     }
 
@@ -71,15 +91,13 @@ public class ChatController {
         int result = chatService.minusUserCnt(chat.getRoomId(), chat.getSender());
 
         if(result > 0){
-            ChatDto leaveChat = ChatDto.builder()
-                    .type(ChatDto.MessageType.LEAVE)
-                    .sender("ADMIN")
-                    .message(chat.getSender() + " 님 퇴장!!")
-                    .build();
 
-            template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), leaveChat);
+            chat.setType(ChatDto.MessageType.LEAVE);
+            chat.setMessage(chat.getSender() + " 님이 채팅방에서 나가셨습니다.");
+            chat.setSender("ADMIN");
+            template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
+            chatService.saveChatList(chat);
         }
-
 
     }
 
@@ -87,9 +105,33 @@ public class ChatController {
     @MessageMapping("/chat/sendMessage")
     public void sendMessage(@Payload ChatDto chat) {
         log.info("CHAT {}", chat);
-        chat.setMessage(chat.getMessage());
-        template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
+        String user = chat.getSender();
+        ChatDto.MessageType type = chat.getType();
+        String msg = chat.getMessage();
+
+        ChatRoomDto chatRoom = chatService.findRoomByRoomId(chat.getRoomId());
+        String lastDay = chatRoom.getChat().get(chatRoom.getChat().size() -1).get("date");
+        if(!lastDay.equals(LocalDate.now().toString())){
+            chat.setMessage((LocalDate.now().toString().substring(0,4) + "년 " +  LocalDate.now().toString().substring(5,7) + "월 " + LocalDate.now().toString().substring(8,10)+"일"));
+            chat.setSender("ADMIN");
+            chat.setType(ChatDto.MessageType.NOTICE);
+            template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
+        }
+
+
+        chat.setSender(user);
+        chat.setMessage(msg);
+        chat.setDate(LocalDate.now().toString());
+        chat.setType(type);
         chatService.saveChatList(chat);
+        String half = "";
+        if(LocalTime.now().getHour() / 12 >= 1){
+            half = "PM";
+        }else {
+            half = "AM";
+        }
+        chat.setTime(half + " " + (LocalTime.now().getHour()%12 < 10 ? "0"+ String.valueOf(LocalTime.now().getHour()%12): LocalTime.now().getHour()%12) + ":" + (LocalTime.now().getMinute() < 10 ? "0" + String.valueOf(LocalTime.now().getMinute()) : LocalTime.now().getMinute()));
+        template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
     }
 
 //    // 유저 퇴장 시에는 EventListener 을 통해서 유저 퇴장을 확인

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,9 +30,6 @@ public class ChatRoomController {
 //        returnMap.put("list", chatService.findRoomByUserMail(userName));
         returnMap.put("list", chatService.findRoomAllRoom());
 
-//        System.out.println("userName :: "+ userName);
-//        model.addAttribute("user", "hey");
-//        log.info("SHOW ALL ChatList {}", chatService.findAllRoom());
         return returnMap;
     }
 
@@ -39,14 +37,11 @@ public class ChatRoomController {
     @PostMapping("/chat/createroom")
     @ResponseBody
     public Map<String,Object> createRoom(@RequestBody Map<String,String> roomInfo) {
-//        System.out.println("newName :: "+ roomInfo.get("newName"));
-//        System.out.println("maxCount :: "+ roomInfo.get("userMaxCount"));
 
         System.out.println("create ROOM CONNECT");
         Map<String, String> userData = new HashMap<>();
         userData.put("userName", roomInfo.get("userName"));
 
-//        ChatRoom room = chatService.createChatRoom(roomInfo.get("newName"), roomInfo.get("userMaxCount"), userList);
         ChatRoomDto room = chatService.createChatRoom(roomInfo.get("newName"), roomInfo.get("userMaxCount"), userData.get("userName"));
         log.info("CREATE Chat Room {}", room);
 
@@ -58,23 +53,10 @@ public class ChatRoomController {
     // 채팅방 입장 화면
     // 파라미터로 넘어오는 roomId 를 확인후 해당 roomId 를 기준으로
     // 채팅방을 찾아서 클라이언트를 chatroom 으로 보낸다.
-//    @GetMapping("/chat/room")
-//    public String roomDetail(Model model, String roomId){
-//
-//        log.info("roomId {}", roomId);
-//        model.addAttribute("room", chatRepository.findRoomById(roomId));
-//        return "chatroom";
-//    }
-
-
-    // 채팅방 입장 화면
-    // 파라미터로 넘어오는 roomId 를 확인후 해당 roomId 를 기준으로
-    // 채팅방을 찾아서 클라이언트를 chatroom 으로 보낸다.
 
     @GetMapping("/chat/room")
     @ResponseBody
     public Map<String,Object> roomDetail(String roomId){
-
         log.info("roomId {}", roomId);
         ChatRoomDto chatRoom = chatService.findRoomByRoomId(roomId);
         Map<String, Object> returnMap = new HashMap<>();
