@@ -41,7 +41,7 @@
 
     <insert id="insertCheckoutBook" parameterType="hashMap">
         INSERT INTO tbl_chk_book(b_no, u_email, chk_b_start_date, chk_b_end_date, chk_b_reg_date, chk_b_mod_date)
-        VALUES (#{bNo}, #{uMail}, now(), DATE_ADD(now(), INTERVAL 7 DAY), now(), now())
+        VALUES (#{bNo}, #{uMail}, DATE_FORMAT(now(), '%Y-%m-%d'), DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 7 DAY), '%Y-%m-%d'), now(), now())
     </insert>
 
     <update id="decreaseBookStock" parameterType="Integer">
@@ -49,6 +49,6 @@
     </update>
 
     <select id="selectChkBookList" resultType="HashMap" parameterType="String">
-        SELECT * FROM tbl_chk_book
+        SELECT * FROM tbl_chk_book WHERE chk_b_state = 1
     </select>
 </mapper>

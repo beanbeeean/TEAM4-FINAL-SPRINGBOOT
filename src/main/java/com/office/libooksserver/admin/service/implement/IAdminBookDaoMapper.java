@@ -13,5 +13,7 @@ public interface IAdminBookDaoMapper {
 
     int updateBookInfo(int no, int stock, int state);
 
-    int changeChkBookState(int no);
+    int changeChkBookState(int chkBNo);
+
+    void increaseBookStock(int bNo);
 }

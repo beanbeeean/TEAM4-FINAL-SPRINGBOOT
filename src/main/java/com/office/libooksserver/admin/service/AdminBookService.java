@@ -53,11 +53,13 @@ public class AdminBookService {
         return result;
     }
 
-    public Object changeChkBookState(@PathVariable int no) {
+    public Object changeChkBookState(int bNo, int chkBNo) {
         log.info("[AdminBookService] changeChkBookState()");
-        log.info("no" + no);
+        log.info("bNo" + bNo);
+        log.info("chkBNo" + chkBNo);
 
-        int result = iAdminBookDaoMapper.changeChkBookState(no);
+        int result = iAdminBookDaoMapper.changeChkBookState(chkBNo);
+        iAdminBookDaoMapper.increaseBookStock(bNo);
         log.info("result : "+ result );
 
         return result;
