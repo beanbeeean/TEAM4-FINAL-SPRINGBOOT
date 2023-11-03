@@ -38,8 +38,9 @@ public class ChatController {
         System.out.println("엔터유저");
 
         String user = chat.getSender();
+        String userName = chat.getSendName();
         // 채팅방 유저+1
-        int result = chatService.plusUserCnt(chat.getRoomId(), chat.getSender());
+        int result = chatService.plusUserCnt(chat.getRoomId(), chat.getSender(),chat.getSendName());
         chat.setCurrentUser(chat.getSender());
 
         // 채팅방 유저 개설, 입장 시
@@ -48,7 +49,7 @@ public class ChatController {
             headerAccessor.getSessionAttributes().put("roomId", chat.getRoomId());
 
             chat.setType(ChatDto.MessageType.ENTER);
-            chat.setMessage(user + " 님이 채팅방에 입장하셨습니다.");
+            chat.setMessage(userName + " 님이 채팅방에 입장하셨습니다.");
             chat.setSender("ADMIN");
             chat.setFirst(true);
 
@@ -88,12 +89,12 @@ public class ChatController {
     @MessageMapping("/chat/leaveUser")
     public void leaveUser(@Payload ChatDto chat, SimpMessageHeaderAccessor headerAccessor) {
         System.out.println("LEAVE 유저");
+        System.out.println("cccc"+chat.getSendName());
         int result = chatService.minusUserCnt(chat.getRoomId(), chat.getSender());
 
         if(result > 0){
-
             chat.setType(ChatDto.MessageType.LEAVE);
-            chat.setMessage(chat.getSender() + " 님이 채팅방에서 나가셨습니다.");
+            chat.setMessage(chat.getSendName() + " 님이 채팅방에서 나가셨습니다.");
             chat.setSender("ADMIN");
             template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
             chatService.saveChatList(chat);

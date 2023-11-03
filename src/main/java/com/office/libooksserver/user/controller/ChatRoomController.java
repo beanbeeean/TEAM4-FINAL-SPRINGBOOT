@@ -1,6 +1,7 @@
 package com.office.libooksserver.user.controller;
 
 import com.office.libooksserver.user.dto.ChatRoomDto;
+import com.office.libooksserver.user.dto.UserListDto;
 import com.office.libooksserver.user.service.ChatService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,11 +26,11 @@ public class ChatRoomController {
     // / 로 요청이 들어오면 전체 채팅룸 리스트를 담아서 return
     @GetMapping("/chat/list")
     @ResponseBody
-    public Map<String,Object> getChatRoom(@RequestParam String userName){
+    public Map<String,Object> getChatRoom(@RequestParam String user){
         Map<String,Object> returnMap = new HashMap<>();
 
-//        returnMap.put("list", chatService.findRoomByUserMail(userName));
-        returnMap.put("list", chatService.findRoomAllRoom());
+        returnMap.put("list", chatService.findRoomByUserMail(user));
+        //returnMap.put("list", chatService.findRoomAllRoom());
 
         return returnMap;
     }
@@ -39,10 +41,8 @@ public class ChatRoomController {
     public Map<String,Object> createRoom(@RequestBody Map<String,String> roomInfo) {
 
         System.out.println("create ROOM CONNECT");
-        Map<String, String> userData = new HashMap<>();
-        userData.put("userName", roomInfo.get("userName"));
 
-        ChatRoomDto room = chatService.createChatRoom(roomInfo.get("newName"), roomInfo.get("userMaxCount"), userData.get("userName"));
+        ChatRoomDto room = chatService.createChatRoom(roomInfo.get("newName"), roomInfo.get("userMaxCount"), roomInfo.get("userMail"), roomInfo.get("userName"));
         log.info("CREATE Chat Room {}", room);
 
         Map<String, Object> returnMap = new HashMap<>();
@@ -61,6 +61,16 @@ public class ChatRoomController {
         ChatRoomDto chatRoom = chatService.findRoomByRoomId(roomId);
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("room",chatRoom);
+        return returnMap;
+    }
+
+    @GetMapping("/chat/userlist")
+    @ResponseBody
+    public Map<String, Object> getUserList(String roomId){
+        log.info("roomId {}", roomId);
+        ArrayList<UserListDto> userList = chatService.getUserList(roomId);
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("userList",userList);
         return returnMap;
     }
 

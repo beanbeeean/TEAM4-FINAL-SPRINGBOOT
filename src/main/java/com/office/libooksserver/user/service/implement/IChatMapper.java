@@ -1,13 +1,15 @@
 package com.office.libooksserver.user.service.implement;
 
+import com.office.libooksserver.user.dto.UserListDto;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
 public interface IChatMapper {
 
-    int insertChatRoomForUser(String u_mail, String roomId, String idx);
+    int insertChatRoomForUser(String u_mail, String u_name, String roomId, String idx);
 
     List<String> getUsersChatRooms(String u_mail);
 
@@ -16,4 +18,6 @@ public interface IChatMapper {
     int deleteChatRoomForUser(String u_mail, String roomId);
 
     String getUserJoinIdx(String roomId, String u_mail);
+
+    ArrayList<UserListDto> getUserList(String roomId);
 }

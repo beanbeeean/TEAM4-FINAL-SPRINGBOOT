@@ -25,6 +25,7 @@ public class ChatDto {
     private String message; // 메시지
     private String date;
     private String time; // 채팅 발송 시간간
+    private String sendName;
 
     private int idx;
     private boolean isFirst;
