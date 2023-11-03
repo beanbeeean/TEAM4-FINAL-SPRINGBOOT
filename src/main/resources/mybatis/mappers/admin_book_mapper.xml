@@ -32,4 +32,12 @@
     <update id="updateBookInfo" parameterType="Integer">
         UPDATE tbl_books SET b_state = #{state}, b_stock = #{stock}, b_mod_date = now() WHERE b_no = #{no}
     </update>
+
+    <update id="changeChkBookState" parameterType="Integer">
+        UPDATE tbl_chk_book SET chk_b_state = 0, chk_b_mod_date = now() WHERE chk_b_no = #{chkBNo}
+    </update>
+
+    <update id="increaseBookStock" parameterType="Integer">
+        UPDATE tbl_books SET b_stock = b_stock + 1, b_mod_date = now() WHERE b_no = #{bNo}
+    </update>
 </mapper>

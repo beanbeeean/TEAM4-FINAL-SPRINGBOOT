@@ -1,6 +1,7 @@
 package com.office.libooksserver.user.service.implement;
 
 import com.office.libooksserver.user.dto.BookDto;
+import com.office.libooksserver.user.dto.CheckoutBookDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -17,7 +18,9 @@ public interface IBookDaoMapper {
 
     BookDto getBookDetail(int bNo);
 
-    int insertCheckoutBook(int bNo);
+    int insertCheckoutBook(int bNo, String uMail);
 
     void decreaseBookStock(int bNo);
+
+    List<BookDto> selectChkBookList();
 }

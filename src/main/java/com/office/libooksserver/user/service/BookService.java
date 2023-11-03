@@ -1,6 +1,7 @@
 package com.office.libooksserver.user.service;
 
 import com.office.libooksserver.user.dto.BookDto;
+import com.office.libooksserver.user.dto.CheckoutBookDto;
 import com.office.libooksserver.user.service.implement.IBookDaoMapper;
 import lombok.extern.log4j.Log4j2;
 import org.json.simple.JSONArray;
@@ -129,10 +130,11 @@ public class BookService {
 
     }
 
-    public int checkoutBook(int bNo) {
+    public int checkoutBook(int bNo, String uMail) {
         log.info("[BookService] checkoutBook()");
 
-        int result = iBookDaoMapper.insertCheckoutBook(bNo);
+        CheckoutBookDto dto;
+        int result = iBookDaoMapper.insertCheckoutBook(bNo, uMail);
         if (result > 0) {
             iBookDaoMapper.decreaseBookStock(bNo);
         }
@@ -140,13 +142,17 @@ public class BookService {
         return result;
     }
 
-//    public Map<String, Object> searchBooks(String keyword) {
-//        log.info("[BookService] searchBooks()");
-//
-//        Map<String, Object> map = new HashMap<>();
-//        List<BookDto> dtos = iBookDaoMapper.selectBooks(keyword);
-//
-//        map.put("productDtos", dtos);
-//        return map;
-//    }
+    public Map<String, Object> getChkBookList() {
+        log.info("[BookService] getChkBookList()");
+
+        Map<String, Object> map = new HashMap<>();
+        List<BookDto> dtos = iBookDaoMapper.selectChkBookList();
+        log.info("dtos" + dtos.size());
+
+        map.put("dtos",dtos);
+
+        return map;
+    }
+
+
 }

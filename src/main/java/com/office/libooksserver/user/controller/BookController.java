@@ -2,6 +2,7 @@ package com.office.libooksserver.user.controller;
 
 import com.office.libooksserver.login.service.user.UserDto;
 import com.office.libooksserver.user.dto.BookDto;
+import com.office.libooksserver.user.dto.CheckoutBookDto;
 import com.office.libooksserver.user.dto.CommunityDto;
 import com.office.libooksserver.user.service.BookService;
 import lombok.extern.log4j.Log4j2;
@@ -20,15 +21,6 @@ public class BookController {
     @Autowired
     BookService bookService;
 
-//    @GetMapping({"","/"})
-//    public Map<String, Object> home() {
-//        log.info("[BookController] home()");
-//
-////        bookService.insertBooks("ItemNewAll");
-////        bookService.insertBooks("ItemNewSpecial");
-////        bookService.insertBooks("Bestseller");
-//        return bookService.showBooks();
-//    }
 
     @GetMapping("/home")
     @ResponseBody
@@ -39,6 +31,7 @@ public class BookController {
         log.info("category : " + category);
         log.info("keyword : " + keyword);
 
+        bookService.getChkBookList();
         return bookService.showBooks(category, keyword);
     }
 
@@ -54,24 +47,35 @@ public class BookController {
         return bookDto;
     }
 
-    @PostMapping("/checkout/{id}")
-    public Object checkoutBook(@PathVariable int id) {
+//    @GetMapping("/checkout")
+//    public int checkoutBook(@RequestParam(name = "id", required = false) int id,
+//                               @RequestParam(name = "u_email", required = false) String u_email ) {
+//        log.info("[BookController] checkoutBook");
+//        log.info("id : " + id);
+//        log.info("u_email : " + u_email);
+//
+//        int result = bookService.checkoutBook(id, u_email);
+//
+//        return result;
+//    }
+
+    @GetMapping("/checkout")
+    public Map<String, Object> checkoutBook(@RequestParam(name = "id", required = false) int id,
+                            @RequestParam(name = "u_email", required = false) String u_email ) {
         log.info("[BookController] checkoutBook");
 
-        int result = bookService.checkoutBook(id);
-
-        return result;
+        bookService.checkoutBook(id, u_email);
+        return bookService.getChkBookList();
     }
 
-//    @GetMapping("/search{keyword}")
-//    @ResponseBody
-//    public Map<String, Object>  searchBooks(@PathVariable String keyword){
-//        log.info("[BookController] searchBooks()");
-//        log.info("keyword: "+keyword);
-//
-//        Map<String, Object> resultMap = bookService.searchBooks(keyword);
-//
-//        return resultMap;
-//    }
+    @GetMapping("/checkout_book_list")
+    @ResponseBody
+    public Map<String, Object> getChkBookList() {
+
+        log.info("[BookController] getChkBookList()");
+
+        return bookService.getChkBookList();
+    }
+
 
 }

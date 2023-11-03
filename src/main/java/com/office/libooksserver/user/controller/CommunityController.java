@@ -40,14 +40,15 @@ public class CommunityController {
     @ResponseBody
     public Object writeCommunity(@RequestParam(name = "selection", required = false) int category,
                                  @RequestParam(name = "title", required = false) String title,
-                                 @RequestParam(name = "content", required = false) String content
+                                 @RequestParam(name = "content", required = false) String content,
+                                 @RequestParam(name = "u_email", required = false) String u_email
     ) {
         log.info("[CommunityController] writeCommunity()");
         log.info("category" + category);
         log.info("title" + title);
         log.info("content" + content);
 
-        int result = communityService.writeCommunity(category, title, content);
+        int result = communityService.writeCommunity(category, title, content, u_email);
 
         return result;
     }

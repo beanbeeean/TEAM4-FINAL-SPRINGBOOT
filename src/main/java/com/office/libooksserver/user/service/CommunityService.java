@@ -30,10 +30,10 @@ public class CommunityService {
         return map;
     }
 
-    public int writeCommunity(int category, String title, String content) {
+    public int writeCommunity(int category, String title, String content, String uMail) {
         log.info("[CommunityService] writeCommunity()");
 
-        int result = iCommunityDaoMapper.insertNewCommunity(category, title, content);
+        int result = iCommunityDaoMapper.insertNewCommunity(category, title, content, uMail);
         log.info("result : " + result);
 
         return result;
