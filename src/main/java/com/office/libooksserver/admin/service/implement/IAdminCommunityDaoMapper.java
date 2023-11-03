@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface IAdminCommunityDaoMapper {
     List<CommunityDto> selectCommunityByFiltering(String category, String keyword);
+
+    int updateCommunityState(int no);
 }

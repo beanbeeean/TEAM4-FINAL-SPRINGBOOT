@@ -32,4 +32,13 @@ public class AdminCommunityService {
 
         return map;
     }
+
+    public Object changeCommunityState(int no) {
+        log.info("[AdminCommunityService] changeCommunityState()");
+
+        int result = iAdminCommunityDaoMapper.updateCommunityState(no);
+        log.info("result : "+ result );
+
+        return result;
+    }
 }

@@ -28,19 +28,15 @@ public class AdminCommunityController {
         return adminCommunityService.showCommunities(category, keyword);
     }
 
-//    @GetMapping("/change_book_state")
-//    @ResponseBody
-//    public Object changeBookInfo(@RequestParam(name = "no", required = false) int no,
-//                                 @RequestParam(name = "stock", required = false) int stock,
-//                                    @RequestParam(name = "state", required = false) int state ) {
-//
-//        log.info("[AdminBookController] changeBookInfo()");
-//        log.info("no : " + no);
-//        log.info("stock : " + stock);
-//        log.info("state : " + state);
-//
-//        return adminBookService.changeBookInfo(no, stock, state);
-//    }
+    @GetMapping("/change_community_state")
+    @ResponseBody
+    public Object changeBookInfo(@RequestParam(name = "no", required = false) int no) {
+
+        log.info("[AdminBookController] changeBookInfo()");
+        log.info("no : " + no);
+
+        return adminCommunityService.changeCommunityState(no);
+    }
 
 }
 
