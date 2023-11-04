@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.office.libooksserver.admin.service.implement.IAdminUserDaoMapper">
+
+    <select id="selectUsersByFiltering" resultType="HashMap" parameterType="String">
+        SELECT * FROM tbl_user
+        <if test="keyword != ''">
+            WHERE u_email LIKE CONCAT('%', #{keyword}, '%') OR u_name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+    </select>
+
+<!--    <select id="selectByChkUserList" resultType="HashMap" parameterType="Integer">-->
+<!--        SELECT * FROM tbl_chk_book WHERE b_no = #{bNo}-->
+<!--    </select>-->
+
+<!--    <update id="updateBookInfo" parameterType="Integer">-->
+<!--        UPDATE tbl_books SET b_state = #{state}, b_stock = #{stock}, b_mod_date = now() WHERE b_no = #{no}-->
+<!--    </update>-->
+
+<!--    <update id="changeChkBookState" parameterType="Integer">-->
+<!--        UPDATE tbl_chk_book SET chk_b_state = 0, chk_b_mod_date = now() WHERE chk_b_no = #{chkBNo}-->
+<!--    </update>-->
+
+<!--    <update id="increaseBookStock" parameterType="Integer">-->
+<!--        UPDATE tbl_books SET b_stock = b_stock + 1, b_mod_date = now() WHERE b_no = #{bNo}-->
+<!--    </update>-->
+</mapper>
