@@ -2,10 +2,17 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.office.libooksserver.admin.service.implement.IAdminUserDaoMapper">
+<mapper namespace="com.office.libooksserver.admin.service.implement.IAdminDaoMapper">
 
     <select id="selectUsersByFiltering" resultType="HashMap" parameterType="String">
         SELECT * FROM tbl_user WHERE u_role = 'USER'
+        <if test="keyword != ''">
+            AND( u_email LIKE CONCAT('%', #{keyword}, '%') OR u_name LIKE CONCAT('%', #{keyword}, '%'))
+        </if>
+    </select>
+
+    <select id="selectAdminsByFiltering" resultType="HashMap" parameterType="String">
+        SELECT * FROM tbl_user WHERE u_role = 'ADMIN'
         <if test="keyword != ''">
             AND( u_email LIKE CONCAT('%', #{keyword}, '%') OR u_name LIKE CONCAT('%', #{keyword}, '%'))
         </if>

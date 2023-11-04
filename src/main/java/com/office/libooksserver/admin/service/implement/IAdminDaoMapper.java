@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 @Mapper
-public interface IAdminUserDaoMapper {
+public interface IAdminDaoMapper {
 //    List<BookDto> selectBooksByFiltering(String category, String keyword);
 //
 //    List<BookDto> selectByChkUserList(int bNo);
@@ -18,4 +18,6 @@ public interface IAdminUserDaoMapper {
 //    void increaseBookStock(int bNo);
 
     List<UserDto> selectUsersByFiltering(String keyword);
+
+    List<UserDto> selectAdminsByFiltering(String keyword);
 }
