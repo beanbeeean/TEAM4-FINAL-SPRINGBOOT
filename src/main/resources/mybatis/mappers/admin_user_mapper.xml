@@ -5,9 +5,9 @@
 <mapper namespace="com.office.libooksserver.admin.service.implement.IAdminUserDaoMapper">
 
     <select id="selectUsersByFiltering" resultType="HashMap" parameterType="String">
-        SELECT * FROM tbl_user
+        SELECT * FROM tbl_user WHERE u_role = 'USER'
         <if test="keyword != ''">
-            WHERE u_email LIKE CONCAT('%', #{keyword}, '%') OR u_name LIKE CONCAT('%', #{keyword}, '%')
+            AND( u_email LIKE CONCAT('%', #{keyword}, '%') OR u_name LIKE CONCAT('%', #{keyword}, '%'))
         </if>
     </select>
 
