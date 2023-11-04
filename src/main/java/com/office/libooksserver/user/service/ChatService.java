@@ -171,12 +171,19 @@ public class ChatService {
 
         DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
         ChatRoomDto chatRoom = mapper.load(ChatRoomDto.class, roomId);
-        int result = iChatMapper.deleteChatRoomForUser(u_mail,roomId);
-        if(result > 0){
-            chatRoom.setUserCount(chatRoom.getUserCount()-1);
-            mapper.save(chatRoom);
+        if(chatRoom.getUserCount() == 0){
+            iChatMapper.deleteChatRoomForUser(u_mail,roomId);
+            mapper.delete(roomId);
+            return -1;
+        }else{
+            int result = iChatMapper.deleteChatRoomForUser(u_mail,roomId);
+            if(result > 0){
+                chatRoom.setUserCount(chatRoom.getUserCount()-1);
+                mapper.save(chatRoom);
+            }
+            return result;
         }
-        return result;
+
     }
 
     public ArrayList<UserListDto> getUserList(String roomId) {

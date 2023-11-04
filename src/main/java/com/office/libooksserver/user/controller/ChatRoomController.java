@@ -29,8 +29,8 @@ public class ChatRoomController {
     public Map<String,Object> getChatRoom(@RequestParam String user){
         Map<String,Object> returnMap = new HashMap<>();
 
-        returnMap.put("list", chatService.findRoomByUserMail(user));
-        //returnMap.put("list", chatService.findRoomAllRoom());
+//        returnMap.put("list", chatService.findRoomByUserMail(user));
+        returnMap.put("list", chatService.findRoomAllRoom());
 
         return returnMap;
     }
