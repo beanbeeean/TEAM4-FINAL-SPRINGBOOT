@@ -40,12 +40,16 @@ public class ChatRoomDto {
     @DynamoDBAttribute
     private ArrayList<Map<String, String>> chat;
 
-    public ChatRoomDto create(String roomName, int userMaxCount){
+    @DynamoDBAttribute
+    private int cNo;
+
+    public ChatRoomDto create(String roomName, int userMaxCount, int cNo){
         ChatRoomDto chatRoomDto = new ChatRoomDto();
         chatRoomDto.roomId = UUID.randomUUID().toString();
         chatRoomDto.roomName = roomName;
         chatRoomDto.userCount = 1;
         chatRoomDto.userMaxCount = userMaxCount;
+        chatRoomDto.cNo = cNo;
 
         ArrayList<Map<String, String>> chat = new ArrayList<>();
         Map<String,String> map = new HashMap<>();

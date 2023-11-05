@@ -29,11 +29,23 @@ public class ChatRoomController {
     public Map<String,Object> getChatRoom(@RequestParam String user){
         Map<String,Object> returnMap = new HashMap<>();
 
-//        returnMap.put("list", chatService.findRoomByUserMail(user));
-        returnMap.put("list", chatService.findRoomAllRoom());
+        returnMap.put("list", chatService.findRoomByUserMail(user));
+//        returnMap.put("list", chatService.findRoomAllRoom());
 
         return returnMap;
     }
+    // 채팅방 생성(연결)
+    @PostMapping("/chat/duplicate")
+    @ResponseBody
+    public Map<String,Integer> duplicateRoom(@RequestBody Map<String,String> roomName) {
+        System.out.println("map :: "+ roomName.get("newName"));
+        int isExisted = chatService.isDuplicateRoomName(roomName.get("newName"));
+
+        Map<String, Integer> returnMap = new HashMap<>();
+        returnMap.put("isDuplicate", isExisted);
+        return returnMap;
+    }
+
 
     // 채팅방 생성(연결)
     @PostMapping("/chat/createroom")
@@ -42,7 +54,7 @@ public class ChatRoomController {
 
         System.out.println("create ROOM CONNECT");
 
-        ChatRoomDto room = chatService.createChatRoom(roomInfo.get("newName"), roomInfo.get("userMaxCount"), roomInfo.get("userMail"), roomInfo.get("userName"));
+        ChatRoomDto room = chatService.createChatRoom(roomInfo.get("newName"), roomInfo.get("userMaxCount"), roomInfo.get("userMail"), roomInfo.get("userName"), roomInfo.get("cNo"));
         log.info("CREATE Chat Room {}", room);
 
         Map<String, Object> returnMap = new HashMap<>();
@@ -71,6 +83,16 @@ public class ChatRoomController {
         ArrayList<UserListDto> userList = chatService.getUserList(roomId);
         Map<String, Object> returnMap = new HashMap<>();
         returnMap.put("userList",userList);
+        return returnMap;
+    }
+
+    @GetMapping("/chat/room_cno")
+    @ResponseBody
+    public Map<String,Object> getRoomByCno(String cNo){
+        log.info("cNo {}", cNo);
+        ChatRoomDto chatRoom = chatService.findRoomByCno(cNo);
+        Map<String, Object> returnMap = new HashMap<>();
+        returnMap.put("room",chatRoom);
         return returnMap;
     }
 

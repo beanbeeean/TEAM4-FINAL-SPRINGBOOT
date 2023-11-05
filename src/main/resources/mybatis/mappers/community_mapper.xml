@@ -5,7 +5,32 @@
 <mapper namespace="com.office.libooksserver.user.service.implement.ICommunityDaoMapper">
 
     <select id="selectCommunity" resultType="com.office.libooksserver.user.dto.CommunityDto">
-        SELECT * FROM tbl_community ORDER BY c_reg_date desc
+        SELECT 
+            * 
+        FROM tbl_community 
+        WHERE 
+            c_category = #{category}
+        <if test="keyword != ''">
+            <choose>
+                <when test="searchOption == 1">
+                    AND
+                    (
+                     c_title LIKE CONCAT('%', #{keyword}, '%')
+                    OR
+                    u_email LIKE CONCAT('%', #{keyword}, '%')
+                    )
+                </when>
+                <when test="searchOption == 2">
+                    AND
+                    c_title LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="searchOption == 3">
+                    AND u_email LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+            </choose>
+        </if>
+
+        ORDER BY c_reg_date desc
     </select>
 
     <insert id="insertNewCommunity" parameterType="hashMap">
@@ -27,5 +52,9 @@
     <delete id="deleteCommunity" parameterType="Integer">
         DELETE FROM tbl_community WHERE c_no = #{id}
     </delete>
+
+    <select id="getCommunityCno" parameterType="hashMap" resultType="Integer">
+        SELECT c_no FROM tbl_community WHERE c_category = #{category} AND u_email = #{uMail} ORDER BY c_reg_date desc LIMIT 1;
+    </select>
 
 </mapper>

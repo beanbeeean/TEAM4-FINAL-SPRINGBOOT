@@ -30,10 +30,12 @@ public class CommunityController {
 
     @GetMapping({"", "/"})
     @ResponseBody
-    public Map<String, Object> getCommunity(){
+    public Map<String, Object> getCommunity(@RequestParam(name = "keyword", defaultValue = "") String keyword,
+                                            @RequestParam(name = "category", defaultValue = "1") int category,
+                                            @RequestParam(name = "searchOption", defaultValue = "1") int searchOption){
         log.info("[CommunityController] getCommunity()");
 
-        return communityService.getCommunity();
+        return communityService.getCommunity(keyword,category,searchOption);
     }
 
     @GetMapping("/write")
