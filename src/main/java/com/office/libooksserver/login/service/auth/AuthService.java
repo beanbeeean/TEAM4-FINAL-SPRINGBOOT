@@ -2,6 +2,7 @@ package com.office.libooksserver.login.service.auth;
 
 import com.office.libooksserver.login.advice.assertThat.DefaultAssert;
 import com.office.libooksserver.login.config.security.token.UserPrincipal;
+import com.office.libooksserver.login.domain.entity.user.Role;
 import com.office.libooksserver.login.domain.entity.user.Token;
 import com.office.libooksserver.login.domain.mapping.TokenMapping;
 import com.office.libooksserver.login.payload.request.auth.ChangePasswordRequest;
@@ -168,7 +169,8 @@ public class AuthService {
                         .u_email(signUpRequest.getEmail())
                         .u_password(passwordEncoder.encode(signUpRequest.getPassword()))
                         .u_provider("local")
-                        .u_role("ADMIN")
+                        .u_role(Role.ADMIN.getValue())
+                        .u_state(0)
                         .build();
 
         userMapper.save(user);

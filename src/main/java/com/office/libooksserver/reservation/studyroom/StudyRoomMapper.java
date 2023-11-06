@@ -6,5 +6,7 @@ import java.util.List;
 
 @Mapper
 public interface StudyRoomMapper {
-    List<StudyRoomDto> checkRoom(int sr_date);
+    List<StudyRoomDto> checkRoom(int sr_date, int sr_room);
+
+    void reservationRoom(StudyRoomDto studyRoomDto);
 }

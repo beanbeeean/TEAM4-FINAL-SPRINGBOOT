@@ -10,9 +10,15 @@ public class StudyRoomService {
     @Autowired
     StudyRoomMapper studyRoomMapper;
 
-    public List<StudyRoomDto> checkRoom(int sr_date){
+    public List<StudyRoomDto> checkRoom(int sr_date,int sr_room){
 
-        return studyRoomMapper.checkRoom(sr_date);
+        return studyRoomMapper.checkRoom(sr_date, sr_room);
+
+    }
+
+    public void reservationRoom(StudyRoomDto studyRoomDto){
+
+        studyRoomMapper.reservationRoom(studyRoomDto);
 
     }
 

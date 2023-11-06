@@ -4,6 +4,7 @@ import com.office.libooksserver.login.advice.assertThat.DefaultAssert;
 import com.office.libooksserver.login.config.security.auth.OAuth2UserInfo;
 import com.office.libooksserver.login.config.security.auth.OAuth2UserInfoFactory;
 import com.office.libooksserver.login.config.security.token.UserPrincipal;
+import com.office.libooksserver.login.domain.entity.user.Role;
 import com.office.libooksserver.login.service.user.UserDto;
 import com.office.libooksserver.login.service.user.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +69,8 @@ public class CustomDefaultOAuth2UserService extends DefaultOAuth2UserService{
                     .u_email(oAuth2UserInfo.getEmail())
                     .u_provider(oAuth2UserRequest.getClientRegistration().getRegistrationId())
 //                    .imageUrl(oAuth2UserInfo.getImageUrl())
-                    .u_role("USER")
+                    .u_role(Role.USER.getValue())
+                    .u_state(1)
                     .build();
 
         userMapper.save(user);

@@ -25,5 +25,6 @@ public class ReadRoomController {
     public void reservationSeat(@RequestBody ReadRoomDto readRoomDto) {
 
         readService.reservationSeat(readRoomDto);
+        readService.userReservation(readRoomDto);
     }
 }

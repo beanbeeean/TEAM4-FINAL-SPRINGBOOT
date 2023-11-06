@@ -10,9 +10,16 @@
 
     </select>
 
-    <insert id="reservationSeat" parameterType="com.office.libooksserver.reservation.readroom.ReadRoomDto">
+    <update id="reservationSeat" parameterType="com.office.libooksserver.reservation.readroom.ReadRoomDto">
 
         UPDATE tbl_reading_room SET re_reservation = #{re_reservation} where re_room_no = #{re_room_no} and re_seat = #{re_seat}
+
+    </update>
+
+    <insert id="userReservation" parameterType="com.office.libooksserver.reservation.readroom.ReadRoomDto">
+
+        INSERT INTO tbl_reservaion_log (l_email, l_reg_date)
+        VALUES (#{l_email}, now())
 
     </insert>
 
