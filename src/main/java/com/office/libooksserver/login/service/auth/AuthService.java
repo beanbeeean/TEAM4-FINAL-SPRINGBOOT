@@ -170,7 +170,7 @@ public class AuthService {
                         .u_password(passwordEncoder.encode(signUpRequest.getPassword()))
                         .u_provider("local")
                         .u_role(Role.ADMIN.getValue())
-                        .u_state(0)
+                        .u_state("0")
                         .build();
 
         userMapper.save(user);
