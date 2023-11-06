@@ -31,6 +31,10 @@ public class BookController {
         log.info("category : " + category);
         log.info("keyword : " + keyword);
 
+//        bookService.insertBooks("ItemNewAll");
+//        bookService.insertBooks("ItemNewSpecial");
+//        bookService.insertBooks("Bestseller");
+
         bookService.getChkBookList();
         return bookService.showBooks(category, keyword);
     }

@@ -5,14 +5,14 @@
 <mapper namespace="com.office.libooksserver.admin.service.implement.IAdminDaoMapper">
 
     <select id="selectUsersByFiltering" resultType="HashMap" parameterType="String">
-        SELECT * FROM tbl_user WHERE u_role = 'USER'
+        SELECT * FROM tbl_user WHERE u_role = 'ROLE_USER'
         <if test="keyword != ''">
             AND( u_email LIKE CONCAT('%', #{keyword}, '%') OR u_name LIKE CONCAT('%', #{keyword}, '%'))
         </if>
     </select>
 
     <select id="selectAdminsByFiltering" resultType="HashMap" parameterType="String">
-        SELECT * FROM tbl_user WHERE u_role = 'ADMIN'
+        SELECT * FROM tbl_user WHERE u_role = 'ROLE_ADMIN'
         <if test="keyword != ''">
             AND( u_email LIKE CONCAT('%', #{keyword}, '%') OR u_name LIKE CONCAT('%', #{keyword}, '%'))
         </if>
