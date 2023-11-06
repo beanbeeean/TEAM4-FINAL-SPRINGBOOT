@@ -8,9 +8,7 @@ import java.util.List;
 @Mapper
 public interface IAdminDaoMapper {
 
-    List<UserDto> selectUsersByFiltering(String keyword);
-
-    List<UserDto> selectAdminsByFiltering(String keyword);
-
     int updateUserState(int no);
+
+    List<UserDto> selectMembersByFiltering(String keyword);
 }

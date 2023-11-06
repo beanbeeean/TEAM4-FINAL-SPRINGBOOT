@@ -15,24 +15,14 @@ public class AdminController {
     @Autowired
     AdminService adminService;
 
-    @GetMapping("/userManagement")
+    @GetMapping("/memberManagement")
     @ResponseBody
-    public Map<String, Object> userList(@RequestParam(name = "keyword", required = false) String keyword ) {
+    public Map<String, Object> memberList(@RequestParam(name = "keyword", required = false) String keyword ) {
 
-        log.info("[AdminUserController] userList()");
+        log.info("[AdminUserController] memberList()");
         log.info("keyword : " + keyword);
 
-        return adminService.showUsers(keyword);
-    }
-
-    @GetMapping("/adminManagement")
-    @ResponseBody
-    public Map<String, Object> adminList(@RequestParam(name = "keyword", required = false) String keyword ) {
-
-        log.info("[AdminUserController] adminList()");
-        log.info("keyword : " + keyword);
-
-        return adminService.showAdmins(keyword);
+        return adminService.showMembers(keyword);
     }
     @GetMapping("/change_user_state")
     @ResponseBody
