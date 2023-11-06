@@ -43,36 +43,13 @@ public class AdminService {
         return map;
     }
 
-//    public Map<String, Object> showChkUserList(int bNo) {
-//        log.info("[AdminBookService] showChkUserList()");
-//
-//        Map<String, Object> map = new HashMap<>();
-//        List<BookDto> dtos = iAdminBookDaoMapper.selectByChkUserList(bNo);
-//        log.info("dtos" + dtos.size());
-//
-//        map.put("dtos",dtos);
-//
-//        return map;
-//    }
+    public Object changeUserState(int no) {
+        log.info("[AdminUserService] changeUserState()");
 
-//    public int changeBookInfo(int no, int stock, int state) {
-//        log.info("[AdminBookService] changeBookInfo()");
-//
-//        int result = iAdminBookDaoMapper.updateBookInfo(no, stock, state);
-//        log.info("result : "+ result );
-//
-//        return result;
-//    }
+        int result = iAdminDaoMapper.updateUserState(no);
+        log.info("result : "+ result );
 
-//    public Object changeChkBookState(int bNo, int chkBNo) {
-//        log.info("[AdminBookService] changeChkBookState()");
-//        log.info("bNo" + bNo);
-//        log.info("chkBNo" + chkBNo);
-//
-//        int result = iAdminBookDaoMapper.changeChkBookState(chkBNo);
-//        iAdminBookDaoMapper.increaseBookStock(bNo);
-//        log.info("result : "+ result );
-//
-//        return result;
-//    }
+        return result;
+    }
+
 }
