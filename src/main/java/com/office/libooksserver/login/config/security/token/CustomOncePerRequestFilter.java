@@ -45,6 +45,8 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter{
 
         String bearerToken = request.getHeader("Authorization");
 
+        log.info("bearerToken : ",bearerToken );
+
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
             log.info("bearerToken = {}", bearerToken.substring(7, bearerToken.length()));
             return bearerToken.substring(7, bearerToken.length());
