@@ -2,6 +2,7 @@ package com.office.libooksserver.login.service.user;
 
 import com.office.libooksserver.login.config.security.token.UserPrincipal;
 import com.office.libooksserver.login.payload.response.ApiResponse;
+import com.office.libooksserver.reservation.readroom.ReadRoomDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,12 @@ public class UserService {
     public UserDto myPage(String email){
 
         return userMapper.findByEmail(email);
+
+    }
+
+    public ReadRoomDto myReservation(String email){
+
+        return userMapper.myReservation(email);
 
     }
 

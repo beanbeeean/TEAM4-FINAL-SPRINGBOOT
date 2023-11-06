@@ -5,11 +5,11 @@
 <mapper namespace="com.office.libooksserver.user.service.implement.ICommunityDaoMapper">
 
     <select id="selectCommunity" resultType="com.office.libooksserver.user.dto.CommunityDto">
-        SELECT * FROM tbl_community ORDER BY c_reg_date desc
+        SELECT * FROM tbl_community WHERE c_state = 1 ORDER BY c_reg_date desc
     </select>
 
     <insert id="insertNewCommunity" parameterType="hashMap">
-        INSERT INTO tbl_community (u_no, c_category, c_title, c_content, c_reg_date, c_mod_date) VALUES (1, #{category}, #{title}, #{content},  now(), now())
+        INSERT INTO tbl_community (u_email, c_category, c_title, c_content, c_reg_date, c_mod_date) VALUES (#{uMail}, #{category}, #{title}, #{content},  now(), now())
     </insert>
 
     <update id="updateCommunityHit" parameterType="Integer">

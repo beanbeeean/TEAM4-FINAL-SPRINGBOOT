@@ -1,5 +1,6 @@
 package com.office.libooksserver.login.service.user;
 
+import com.office.libooksserver.reservation.readroom.ReadRoomDto;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -19,4 +20,6 @@ public interface UserMapper {
     void delete(Long u_no);
 
     Boolean existsByEmail(String u_email);
+
+    ReadRoomDto myReservation(String email);
 }

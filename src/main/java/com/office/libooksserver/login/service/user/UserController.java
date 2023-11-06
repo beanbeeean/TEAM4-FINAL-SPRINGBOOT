@@ -34,6 +34,12 @@ public class UserController {
         return ResponseEntity.ok(userService.myPage(userPrincipal.getU_email()));
     }
 
+    @GetMapping("/reservation")
+    public ResponseEntity<?> myReservation(@Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal) {
+
+        return ResponseEntity.ok(userService.myReservation(userPrincipal.getU_email()));
+    }
+
     @PostMapping("/userUpdate")
     public ResponseEntity<?> userUpdate(@RequestBody UserDto userDto) {
 

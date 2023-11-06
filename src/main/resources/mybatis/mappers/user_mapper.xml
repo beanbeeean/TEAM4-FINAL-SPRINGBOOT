@@ -30,8 +30,8 @@
 
     <insert id="save" parameterType="com.office.libooksserver.login.service.user.UserDto">
 
-        INSERT INTO tbl_user (u_email, u_name, u_password, u_provider, u_role, u_reg_date, u_mod_date)
-        VALUES (#{u_email}, #{u_name}, #{u_password}, #{u_provider}, #{u_role}, now(), now())
+        INSERT INTO tbl_user (u_email, u_name, u_password, u_provider, u_role, u_state,u_reg_date, u_mod_date)
+        VALUES (#{u_email}, #{u_name}, #{u_password}, #{u_provider}, #{u_role}, #{u_state},now(), now())
 
     </insert>
 

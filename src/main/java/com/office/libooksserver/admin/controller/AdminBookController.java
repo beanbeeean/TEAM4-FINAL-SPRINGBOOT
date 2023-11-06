@@ -50,5 +50,17 @@ public class AdminBookController {
 
         return adminBookService.changeBookInfo(no, stock, state);
     }
+
+    @GetMapping("/return_book")
+    @ResponseBody
+    public Object changeChkBookState(@RequestParam(name = "b_no", required = false) int b_no,
+                                     @RequestParam(name = "chk_b_no", required = false) int chk_b_no) {
+
+        log.info("[AdminBookController] changeChkBookState()");
+        log.info("b_no : " + b_no);
+        log.info("chk_b_no : " + chk_b_no);
+
+        return adminBookService.changeChkBookState(b_no, chk_b_no);
+    }
 }
 
