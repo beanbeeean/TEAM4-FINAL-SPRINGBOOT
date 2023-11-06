@@ -165,7 +165,6 @@ public class AuthService {
         DefaultAssert.isTrue(chk, "해당 이메일이 존재합니다.");
 
         UserDto user = UserDto.builder()
-                        .u_name(signUpRequest.getName())
                         .u_email(signUpRequest.getEmail())
                         .u_password(passwordEncoder.encode(signUpRequest.getPassword()))
                         .u_provider("local")
