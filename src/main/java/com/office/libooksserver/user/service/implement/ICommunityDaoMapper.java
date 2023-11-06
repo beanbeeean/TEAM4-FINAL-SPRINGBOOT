@@ -24,4 +24,8 @@ public interface ICommunityDaoMapper {
     int insertComment(ReplyDto replyDto);
 
     List<ReplyDto> getComments(int cNo);
+
+    int updateComment(ReplyDto replyDto);
+
+    int deleteComment(ReplyDto replyDto);
 }

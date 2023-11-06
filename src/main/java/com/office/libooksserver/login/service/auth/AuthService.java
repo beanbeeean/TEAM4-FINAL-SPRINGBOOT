@@ -40,6 +40,7 @@ public class AuthService {
 
     @Autowired
     UserMapper userMapper;
+
     @Autowired
     TokenMapper tokenMapper;
 

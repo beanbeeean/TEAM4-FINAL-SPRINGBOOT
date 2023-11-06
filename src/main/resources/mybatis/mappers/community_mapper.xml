@@ -8,27 +8,30 @@
         SELECT
             *
         FROM tbl_community
-        WHERE
+        <if test="category != 0">
+            WHERE
             c_category = #{category}
-        <if test="keyword != ''">
-            <choose>
-                <when test="searchOption == 1">
-                    AND
-                    (
-                     c_title LIKE CONCAT('%', #{keyword}, '%')
-                    OR
-                    u_email LIKE CONCAT('%', #{keyword}, '%')
-                    )
-                </when>
-                <when test="searchOption == 2">
-                    AND
-                    c_title LIKE CONCAT('%', #{keyword}, '%')
-                </when>
-                <when test="searchOption == 3">
-                    AND u_email LIKE CONCAT('%', #{keyword}, '%')
-                </when>
-            </choose>
+            <if test="keyword != '' ">
+                <choose>
+                    <when test="searchOption == 1">
+                        AND
+                        (
+                        c_title LIKE CONCAT('%', #{keyword}, '%')
+                        OR
+                        u_email LIKE CONCAT('%', #{keyword}, '%')
+                        )
+                    </when>
+                    <when test="searchOption == 2">
+                        AND
+                        c_title LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchOption == 3">
+                        AND u_email LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                </choose>
+            </if>
         </if>
+
 
         ORDER BY c_reg_date desc
     </select>
@@ -65,4 +68,12 @@
     <select id="getComments" parameterType="Integer" resultType="com.office.libooksserver.user.dto.ReplyDto">
         SELECT * FROM tbl_reply WHERE c_no = #{cNo}
     </select>
+
+    <update id="updateComment" parameterType="com.office.libooksserver.user.dto.ReplyDto">
+        UPDATE tbl_reply SET r_comment = #{r_comment}, r_mod_date = now() WHERE r_no = #{r_no}
+    </update>
+
+    <delete id="deleteComment" parameterType="com.office.libooksserver.user.dto.ReplyDto">
+        DELETE FROM tbl_reply WHERE r_no = #{r_no}
+    </delete>
 </mapper>
