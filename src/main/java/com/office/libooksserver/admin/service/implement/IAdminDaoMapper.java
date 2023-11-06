@@ -7,17 +7,10 @@ import java.util.List;
 
 @Mapper
 public interface IAdminDaoMapper {
-//    List<BookDto> selectBooksByFiltering(String category, String keyword);
-//
-//    List<BookDto> selectByChkUserList(int bNo);
-//
-//    int updateBookInfo(int no, int stock, int state);
-//
-//    int changeChkBookState(int chkBNo);
-//
-//    void increaseBookStock(int bNo);
 
     List<UserDto> selectUsersByFiltering(String keyword);
 
     List<UserDto> selectAdminsByFiltering(String keyword);
+
+    int updateUserState(int no);
 }
