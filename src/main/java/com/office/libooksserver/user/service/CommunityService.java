@@ -2,6 +2,7 @@ package com.office.libooksserver.user.service;
 
 import com.office.libooksserver.user.dto.BookDto;
 import com.office.libooksserver.user.dto.CommunityDto;
+import com.office.libooksserver.user.dto.ReplyDto;
 import com.office.libooksserver.user.service.implement.ICommunityDaoMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,5 +65,18 @@ public class CommunityService {
         log.info("result : " + result);
 
         return result;
+    }
+
+    public int writeComment(ReplyDto replyDto) {
+        log.info("[CommunityService] writeComment()");
+        return iCommunityDaoMapper.insertComment(replyDto);
+    }
+
+    public Map<String, Object> getComments(int cNo) {
+        log.info("[CommunityService] writeComment()");
+        Map<String, Object> map = new HashMap<>();
+        List<ReplyDto> dtos =iCommunityDaoMapper.getComments(cNo);
+        map.put("dtos", dtos);
+        return map;
     }
 }

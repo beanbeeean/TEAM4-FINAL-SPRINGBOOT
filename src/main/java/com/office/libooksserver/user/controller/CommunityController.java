@@ -2,6 +2,7 @@ package com.office.libooksserver.user.controller;
 
 import com.office.libooksserver.user.dto.BookDto;
 import com.office.libooksserver.user.dto.CommunityDto;
+import com.office.libooksserver.user.dto.ReplyDto;
 import com.office.libooksserver.user.service.CommunityService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Date;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @RestController
 @Log4j2
@@ -143,5 +142,20 @@ public class CommunityController {
         } catch(IOException e) {
             return new ResponseEntity<Object>(null, HttpStatus.CONFLICT);
         }
+    }
+
+    @PostMapping("/write_comment")
+    @ResponseBody
+    public int writeComment(@RequestBody ReplyDto replyDto){
+        log.info("[CommunityController] writeComment()");
+        return communityService.writeComment(replyDto);
+    }
+
+    @GetMapping("/get_comments")
+    @ResponseBody
+    public Map<String,Object> getComments(@RequestParam int c_no){
+        System.out.println("getComments " + c_no);
+        Map<String, Object> map = communityService.getComments(c_no);
+        return map;
     }
 }
