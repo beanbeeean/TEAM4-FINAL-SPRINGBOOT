@@ -49,6 +49,6 @@
     </update>
 
     <select id="selectChkBookList" resultType="HashMap" parameterType="String">
-        SELECT * FROM tbl_chk_book WHERE chk_b_state = 1
+        SELECT * FROM tbl_chk_book
     </select>
 </mapper>
