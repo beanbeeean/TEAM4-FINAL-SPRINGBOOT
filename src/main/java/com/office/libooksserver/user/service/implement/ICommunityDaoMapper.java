@@ -8,7 +8,7 @@ import java.util.List;
 @Mapper
 public interface ICommunityDaoMapper {
 
-    List<CommunityDto> selectCommunity();
+    List<CommunityDto> selectCommunity(String keyword, int category, int searchOption);
     int insertNewCommunity(int category, String title, String content, String uMail);
 
     void updateCommunityHit(int cNo);
@@ -17,4 +17,6 @@ public interface ICommunityDaoMapper {
     int updateCommunity(int id, int category, String title, String content);
 
     int deleteCommunity(int id);
+
+    int getCommunityCno(int category, String uMail);
 }

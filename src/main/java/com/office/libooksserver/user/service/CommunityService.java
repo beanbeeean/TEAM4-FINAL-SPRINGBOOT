@@ -18,11 +18,10 @@ public class CommunityService {
     @Autowired
     ICommunityDaoMapper iCommunityDaoMapper;
 
-    public Map<String, Object> getCommunity() {
+    public Map<String, Object> getCommunity(String keyword, int category,int searchOption) {
         log.info("[CommunityService] getCommunity()");
-
         Map<String, Object> map = new HashMap<>();
-        List<CommunityDto> communityDtos = iCommunityDaoMapper.selectCommunity();
+        List<CommunityDto> communityDtos = iCommunityDaoMapper.selectCommunity(keyword, category, searchOption);
         log.info("communityDtos" + communityDtos.size());
 
         map.put("communityDtos", communityDtos);
@@ -34,9 +33,10 @@ public class CommunityService {
         log.info("[CommunityService] writeCommunity()");
 
         int result = iCommunityDaoMapper.insertNewCommunity(category, title, content, uMail);
+        int latestCno = iCommunityDaoMapper.getCommunityCno(category,uMail);
         log.info("result : " + result);
 
-        return result;
+        return latestCno;
     }
 
     public CommunityDto getCommunityDetail(int cNo) {

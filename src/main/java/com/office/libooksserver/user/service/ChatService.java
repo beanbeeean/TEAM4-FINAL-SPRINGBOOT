@@ -5,6 +5,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.office.libooksserver.user.dto.ChatDto;
 import com.office.libooksserver.user.dto.ChatRoomDto;
+import com.office.libooksserver.user.dto.UserListDto;
 import com.office.libooksserver.user.service.implement.IChatMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,13 +31,35 @@ public class ChatService {
         this.amazonDynamoDBClient = amazonDynamoDBClient;
     }
 
+
+    public int isDuplicateRoomName(String newName) {
+
+        int result = 0;
+            if (newName.trim().isEmpty()){
+                  result = -1;
+            }else{
+                  List<ChatRoomDto> dtos = findRoomAllRoom();
+                  if(dtos != null){
+                      for (ChatRoomDto dto:dtos) {
+                          if(dto.getRoomName().equals(newName)){
+                              result = 1;
+                              break;
+                          }
+                      }
+                  }
+
+            }
+            return result;
+    }
+
     // 채팅방 생성
-    public ChatRoomDto createChatRoom(String roomName, String userMaxCount, String userName){
+    public ChatRoomDto createChatRoom(String roomName, String userMaxCount, String userMail, String userName, String cNo){
         try{
-            ChatRoomDto chatRoom = new ChatRoomDto().create(roomName, Integer.parseInt(userMaxCount)); // 채팅룸 이름으로 채팅 룸 생성 후
+            ChatRoomDto chatRoom = new ChatRoomDto().create(roomName, Integer.parseInt(userMaxCount), Integer.parseInt(cNo)); // 채팅룸 이름으로 채팅 룸 생성 후
 
             DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
-            int result = iChatMapper.insertChatRoomForUser(userName, chatRoom.getRoomId(), "0");
+
+            int result = iChatMapper.insertChatRoomForUser(userMail, userName, chatRoom.getRoomId(), "0");
 
                 if(result > 0){
                     Thread.sleep(1000);
@@ -52,13 +75,22 @@ public class ChatService {
         }
     }
 
+    // 전체 조회(임시)
+    public List<ChatRoomDto> findRoomAllRoom() {
+//
+        DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
+
+        List<ChatRoomDto> chatRooms = mapper.scan(ChatRoomDto.class, new DynamoDBScanExpression());
+        return chatRooms;
+    }
+
 
     // 유저가 포함된 채팅방 조회
-    public List<ChatRoomDto> findRoomByUserMail(String userName){
+    public List<ChatRoomDto> findRoomByUserMail(String u_mail){
 
         DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
 
-        List<String> roomIds = iChatMapper.getUsersChatRooms(userName);
+        List<String> roomIds = iChatMapper.getUsersChatRooms(u_mail);
         List<ChatRoomDto> chatRooms = new ArrayList<>();
         for (String id: roomIds) {
             ChatRoomDto chatRoom = mapper.load(ChatRoomDto.class, id);
@@ -82,7 +114,7 @@ public class ChatService {
     }
 
     // 채팅방 인원+1
-    public int plusUserCnt(String roomId, String u_mail){
+    public int plusUserCnt(String roomId, String u_mail, String u_name){
 
         int result = 0;
         DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
@@ -95,7 +127,7 @@ public class ChatService {
                     result = -1;
                     return result;
                 }else{
-                    int insertSQL = iChatMapper.insertChatRoomForUser(u_mail,roomId, String.valueOf(Integer.parseInt(chatRoom.getChat().get(chatRoom.getChat().size()-1).get("idx")) + 1));
+                    int insertSQL = iChatMapper.insertChatRoomForUser(u_mail,u_name, roomId, String.valueOf(Integer.parseInt(chatRoom.getChat().get(chatRoom.getChat().size()-1).get("idx")) + 1));
                     Thread.sleep(1000);
                     if(insertSQL > 0){
                         chatRoom.setUserCount(chatRoom.getUserCount()+1);
@@ -156,25 +188,42 @@ public class ChatService {
 
     }
 
-    // 전체 조회(임시)
-    public List<ChatRoomDto> findRoomAllRoom() {
-//
-        DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
 
-        List<ChatRoomDto> chatRooms = mapper.scan(ChatRoomDto.class, new DynamoDBScanExpression());
-        return chatRooms;
-    }
 
 //    채팅방 인원-1 & 나가기
     public int minusUserCnt(String roomId, String u_mail){
 
         DynamoDBMapper mapper = new DynamoDBMapper(amazonDynamoDBClient);
         ChatRoomDto chatRoom = mapper.load(ChatRoomDto.class, roomId);
-        int result = iChatMapper.deleteChatRoomForUser(u_mail,roomId);
-        if(result > 0){
-            chatRoom.setUserCount(chatRoom.getUserCount()-1);
-            mapper.save(chatRoom);
+        if(chatRoom.getUserCount() == 0){
+            iChatMapper.deleteChatRoomForUser(u_mail,roomId);
+            mapper.delete(roomId);
+            return -1;
+        }else{
+            int result = iChatMapper.deleteChatRoomForUser(u_mail,roomId);
+            if(result > 0){
+                chatRoom.setUserCount(chatRoom.getUserCount()-1);
+                mapper.save(chatRoom);
+            }
+            return result;
         }
-        return result;
+
+    }
+
+    public ArrayList<UserListDto> getUserList(String roomId) {
+        return iChatMapper.getUserList(roomId);
+    }
+
+
+    public ChatRoomDto findRoomByCno(String cNo) {
+        List<ChatRoomDto> dtos = findRoomAllRoom();
+        ChatRoomDto chatRoomDto = new ChatRoomDto();
+        for (ChatRoomDto dto:dtos) {
+            if(dto.getCNo() == Integer.parseInt(cNo)){
+                chatRoomDto = dto;
+                break;
+            }
+        }
+        return chatRoomDto;
     }
 }
