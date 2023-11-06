@@ -70,7 +70,7 @@ public class CustomDefaultOAuth2UserService extends DefaultOAuth2UserService{
                     .u_provider(oAuth2UserRequest.getClientRegistration().getRegistrationId())
 //                    .imageUrl(oAuth2UserInfo.getImageUrl())
                     .u_role(Role.USER.getValue())
-                    .u_state(1)
+                    .u_state("1")
                     .build();
 
         userMapper.save(user);

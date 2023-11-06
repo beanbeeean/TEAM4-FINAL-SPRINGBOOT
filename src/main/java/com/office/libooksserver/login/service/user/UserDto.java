@@ -16,10 +16,10 @@ public class UserDto {
     private String u_provider;
     private String u_phone;
     private String u_role;
-    private int u_state;
+    private String u_state;
 
     @Builder
-    public UserDto(String u_name, String u_email, String u_password, String u_role, String u_provider, int u_state){
+    public UserDto(String u_name, String u_email, String u_password, String u_role, String u_provider, String u_state){
         this.u_name = u_name;
         this.u_email = u_email;
         this.u_password = u_password;

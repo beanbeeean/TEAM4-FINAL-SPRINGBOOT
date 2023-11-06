@@ -5,32 +5,26 @@
 <mapper namespace="com.office.libooksserver.admin.service.implement.IAdminDaoMapper">
 
     <select id="selectUsersByFiltering" resultType="HashMap" parameterType="String">
-        SELECT * FROM tbl_user WHERE u_role = 'USER'
+        SELECT * FROM tbl_user WHERE u_role = 'ROLE_USER'
         <if test="keyword != ''">
             AND( u_email LIKE CONCAT('%', #{keyword}, '%') OR u_name LIKE CONCAT('%', #{keyword}, '%'))
         </if>
     </select>
 
     <select id="selectAdminsByFiltering" resultType="HashMap" parameterType="String">
-        SELECT * FROM tbl_user WHERE u_role = 'ADMIN'
+        SELECT * FROM tbl_user WHERE u_role = 'ROLE_ADMIN'
         <if test="keyword != ''">
             AND( u_email LIKE CONCAT('%', #{keyword}, '%') OR u_name LIKE CONCAT('%', #{keyword}, '%'))
         </if>
     </select>
 
-<!--    <select id="selectByChkUserList" resultType="HashMap" parameterType="Integer">-->
-<!--        SELECT * FROM tbl_chk_book WHERE b_no = #{bNo}-->
-<!--    </select>-->
+    <update id="updateUserState" parameterType="Integer">
+        UPDATE tbl_user
+        SET u_state = CASE
+                          WHEN u_state = 0 THEN 1
+                          WHEN u_state = 1 THEN 0
+            END
+        WHERE u_no = #{no}
 
-<!--    <update id="updateBookInfo" parameterType="Integer">-->
-<!--        UPDATE tbl_books SET b_state = #{state}, b_stock = #{stock}, b_mod_date = now() WHERE b_no = #{no}-->
-<!--    </update>-->
-
-<!--    <update id="changeChkBookState" parameterType="Integer">-->
-<!--        UPDATE tbl_chk_book SET chk_b_state = 0, chk_b_mod_date = now() WHERE chk_b_no = #{chkBNo}-->
-<!--    </update>-->
-
-<!--    <update id="increaseBookStock" parameterType="Integer">-->
-<!--        UPDATE tbl_books SET b_stock = b_stock + 1, b_mod_date = now() WHERE b_no = #{bNo}-->
-<!--    </update>-->
+    </update>
 </mapper>

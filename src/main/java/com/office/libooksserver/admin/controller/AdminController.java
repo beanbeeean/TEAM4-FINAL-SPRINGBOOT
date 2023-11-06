@@ -34,39 +34,15 @@ public class AdminController {
 
         return adminService.showAdmins(keyword);
     }
+    @GetMapping("/change_user_state")
+    @ResponseBody
+    public Object changeUserInfo(@RequestParam(name = "no", required = false) int no) {
 
-//    @GetMapping("/checkout_book_user_list{bNo}")
-//    @ResponseBody
-//    public Map<String, Object> showChkUserList(@PathVariable int bNo) {
-//        log.info("[AdminBookController] showChkUserList()");
-//
-//        return adminBookService.showChkUserList(bNo);
-//    }
+        log.info("[AdminUserController] changeUserInfo()");
+        log.info("no : " + no);
 
-//    @GetMapping("/change_book_state")
-//    @ResponseBody
-//    public Object changeBookInfo(@RequestParam(name = "no", required = false) int no,
-//                                 @RequestParam(name = "stock", required = false) int stock,
-//                                    @RequestParam(name = "state", required = false) int state ) {
-//
-//        log.info("[AdminBookController] changeBookInfo()");
-//        log.info("no : " + no);
-//        log.info("stock : " + stock);
-//        log.info("state : " + state);
-//
-//        return adminBookService.changeBookInfo(no, stock, state);
-//    }
+        return adminService.changeUserState(no);
+    }
 
-//    @GetMapping("/return_book")
-//    @ResponseBody
-//    public Object changeChkBookState(@RequestParam(name = "b_no", required = false) int b_no,
-//                                     @RequestParam(name = "chk_b_no", required = false) int chk_b_no) {
-//
-//        log.info("[AdminBookController] changeChkBookState()");
-//        log.info("b_no : " + b_no);
-//        log.info("chk_b_no : " + chk_b_no);
-//
-//        return adminBookService.changeChkBookState(b_no, chk_b_no);
-//    }
 }
 
