@@ -46,7 +46,7 @@ public class StudyRoomController {
     @PostMapping("/reservation")
     public ResponseEntity<?> reservationRoom(@RequestBody StudyRoomDto studyRoomDto, @Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal) {
 
-        studyRoomDto.setSr_user(userPrincipal.getU_email());
+        studyRoomDto.setSr_email(userPrincipal.getU_email());
 
         System.out.println("studyRoomDto : " + studyRoomDto);
 

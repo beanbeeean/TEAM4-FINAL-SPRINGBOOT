@@ -3,12 +3,15 @@ package com.office.libooksserver.login.service.user;
 import com.office.libooksserver.login.config.security.token.UserPrincipal;
 import com.office.libooksserver.login.payload.response.ApiResponse;
 import com.office.libooksserver.reservation.readroom.ReadRoomDto;
+import com.office.libooksserver.reservation.studyroom.StudyRoomDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Log4j2
@@ -25,9 +28,15 @@ public class UserService {
 
     }
 
-    public ReadRoomDto myReservation(String email){
+    public List<ReadRoomDto> myReadReservation(String start, String end, String email){
 
-        return userMapper.myReservation(email);
+        return userMapper.myReadReservation(start, end, email);
+
+    }
+
+    public List<StudyRoomDto> myStudyReservation(String start, String end, String email){
+
+        return userMapper.myStudyReservation(start, end, email);
 
     }
 

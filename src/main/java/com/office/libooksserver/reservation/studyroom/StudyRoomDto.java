@@ -13,6 +13,6 @@ public class StudyRoomDto {
     private int sr_date;
     private int sr_time;
     private int time;
-    private String sr_user;
+    private String sr_email;
     private String sr_reg_date;
 }

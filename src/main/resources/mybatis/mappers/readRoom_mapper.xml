@@ -18,8 +18,8 @@
 
     <insert id="userReservation" parameterType="com.office.libooksserver.reservation.readroom.ReadRoomDto">
 
-        INSERT INTO tbl_reservaion_log (l_email, l_reg_date)
-        VALUES (#{l_email}, now())
+        INSERT INTO tbl_reservaion_log (l_email, l_reg_date, l_room_no, l_seat)
+        VALUES (#{l_email}, now(), #{re_room_no}, #{re_seat})
 
     </insert>
 
