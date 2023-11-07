@@ -30,7 +30,7 @@ public class CommunityController {
     @GetMapping({"", "/"})
     @ResponseBody
     public Map<String, Object> getCommunity(@RequestParam(name = "keyword", defaultValue = "") String keyword,
-                                            @RequestParam(name = "category", defaultValue = "1") int category,
+                                            @RequestParam(name = "category", defaultValue = "0") int category,
                                             @RequestParam(name = "searchOption", defaultValue = "1") int searchOption){
         log.info("[CommunityController] getCommunity()");
 
@@ -151,6 +151,19 @@ public class CommunityController {
         return communityService.writeComment(replyDto);
     }
 
+    @PostMapping("/modify_comment")
+    @ResponseBody
+    public int modifyComment(@RequestBody ReplyDto replyDto){
+        log.info("[CommunityController] modifyComment()");
+        return communityService.modifyComment(replyDto);
+    }
+
+    @PostMapping("/delete_comment")
+    @ResponseBody
+    public int deleteComment(@RequestBody ReplyDto replyDto){
+        log.info("[CommunityController] deleteComment()");
+        return communityService.deleteComment(replyDto);
+    }
     @GetMapping("/get_comments")
     @ResponseBody
     public Map<String,Object> getComments(@RequestParam int c_no){

@@ -79,4 +79,14 @@ public class CommunityService {
         map.put("dtos", dtos);
         return map;
     }
+
+    public int modifyComment(ReplyDto replyDto) {
+        log.info("[CommunityService] modifyComment()");
+        return iCommunityDaoMapper.updateComment(replyDto);
+    }
+
+    public int deleteComment(ReplyDto replyDto) {
+        log.info("[CommunityService] deleteComment()");
+        return iCommunityDaoMapper.deleteComment(replyDto);
+    }
 }
