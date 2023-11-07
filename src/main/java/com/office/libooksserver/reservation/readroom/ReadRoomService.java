@@ -15,5 +15,5 @@ public class ReadRoomService {
     }
     public void reservationSeat(ReadRoomDto readRoomDto){ readMapper.reservationSeat(readRoomDto); }
 
-    public void userReservation(ReadRoomDto readRoomDto){ readMapper.userReservation(readRoomDto); }
+    public void userReservation(ReadRoomDto readRoomDto){ System.out.println(readRoomDto); readMapper.userReservation(readRoomDto); }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/user/*")
@@ -34,10 +35,20 @@ public class UserController {
         return ResponseEntity.ok(userService.myPage(userPrincipal.getU_email()));
     }
 
-    @GetMapping("/reservation")
-    public ResponseEntity<?> myReservation(@Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal) {
+    @PostMapping("/myReadReservation")
+    public ResponseEntity<?> myReadReservation(@RequestBody Map<String, String> time, @Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal) {
 
-        return ResponseEntity.ok(userService.myReservation(userPrincipal.getU_email()));
+        System.out.println("time : "+ time.get("startDate"));
+
+        return ResponseEntity.ok(userService.myReadReservation(time.get("startDate"), time.get("endDate"), userPrincipal.getU_email()));
+
+    }
+
+    @PostMapping("/myStudyReservation")
+    public ResponseEntity<?> myStudyReservation(@RequestBody Map<String, String> time, @Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal) {
+
+        return ResponseEntity.ok(userService.myStudyReservation(time.get("startDate"), time.get("endDate"), userPrincipal.getU_email()));
+
     }
 
     @PostMapping("/userUpdate")
