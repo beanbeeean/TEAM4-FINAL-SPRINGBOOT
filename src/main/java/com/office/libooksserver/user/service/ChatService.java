@@ -3,6 +3,7 @@ package com.office.libooksserver.user.service;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.office.libooksserver.login.service.user.UserDto;
 import com.office.libooksserver.user.dto.ChatDto;
 import com.office.libooksserver.user.dto.ChatRoomDto;
 import com.office.libooksserver.user.dto.UserListDto;
@@ -11,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -210,8 +210,19 @@ public class ChatService {
 
     }
 
-    public ArrayList<UserListDto> getUserList(String roomId) {
-        return iChatMapper.getUserList(roomId);
+    public Map<String, Object> getUserList(String roomId) {
+        Map<String, Object> map = new HashMap<>();
+        ArrayList<UserListDto> userList = iChatMapper.getUserList(roomId);
+        ArrayList<UserDto> userDetail = new ArrayList<>();
+        for (UserListDto user: userList) {
+            UserDto dto = iChatMapper.getUserDetail(user.getU_mail());
+            userDetail.add(dto);
+        }
+
+        map.put("userList",userList);
+        map.put("userDetail",userDetail);
+
+        return map;
     }
 
 

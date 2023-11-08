@@ -80,9 +80,7 @@ public class ChatRoomController {
     @ResponseBody
     public Map<String, Object> getUserList(String roomId){
         log.info("roomId {}", roomId);
-        ArrayList<UserListDto> userList = chatService.getUserList(roomId);
-        Map<String, Object> returnMap = new HashMap<>();
-        returnMap.put("userList",userList);
+        Map<String, Object> returnMap = chatService.getUserList(roomId);
         return returnMap;
     }
 
@@ -95,5 +93,6 @@ public class ChatRoomController {
         returnMap.put("room",chatRoom);
         return returnMap;
     }
+
 
 }

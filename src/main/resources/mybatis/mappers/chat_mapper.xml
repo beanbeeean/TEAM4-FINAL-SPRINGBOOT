@@ -27,4 +27,8 @@
     <select id="getUserList" parameterType="String" resultType="com.office.libooksserver.user.dto.UserListDto">
         SELECT * FROM tbl_user_chat WHERE room_id = #{param1}
     </select>
+
+    <select id="getUserDetail" parameterType="String" resultType="com.office.libooksserver.login.service.user.UserDto">
+        SELECT * FROM tbl_user WHERE u_email = #{u_mail}
+    </select>
 </mapper>

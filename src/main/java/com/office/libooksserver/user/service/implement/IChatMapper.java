@@ -1,5 +1,6 @@
 package com.office.libooksserver.user.service.implement;
 
+import com.office.libooksserver.login.service.user.UserDto;
 import com.office.libooksserver.user.dto.UserListDto;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -20,4 +21,6 @@ public interface IChatMapper {
     String getUserJoinIdx(String roomId, String u_mail);
 
     ArrayList<UserListDto> getUserList(String roomId);
+
+    UserDto getUserDetail(String u_mail);
 }

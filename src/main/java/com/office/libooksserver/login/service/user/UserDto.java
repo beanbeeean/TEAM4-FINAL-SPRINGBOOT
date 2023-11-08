@@ -26,6 +26,7 @@ public class UserDto {
         this.u_role = u_role;
         this.u_provider = u_provider;
         this.u_state = u_state;
+        this.u_image = "../imgs/default_profile.png";
     }
 
     public void updateName(String name){
