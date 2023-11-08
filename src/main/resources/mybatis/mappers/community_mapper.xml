@@ -31,8 +31,9 @@
                 </choose>
             </if>
         </if>
-
-
+        <if test="category == 0 and keyword !=''">
+            WHERE  c_title LIKE CONCAT('%', #{keyword}, '%')
+        </if>
         ORDER BY c_reg_date desc
     </select>
 

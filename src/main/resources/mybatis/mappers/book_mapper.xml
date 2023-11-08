@@ -16,7 +16,7 @@
     <select id="selectBooksByFiltering" resultType="HashMap" parameterType="String">
         SELECT * FROM tbl_books WHERE b_state = 1
             <choose>
-                <when test="category == 'all' and keyword !=''">
+                <when test="(category == 'all' or category == '') and keyword !=''">
                     AND b_title LIKE CONCAT('%', #{keyword}, '%')
                 </when>
                 <when test="category == 'new' and keyword !=''">
