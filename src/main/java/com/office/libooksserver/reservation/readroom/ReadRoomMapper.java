@@ -12,4 +12,8 @@ public interface ReadRoomMapper {
 
     void userReservation(ReadRoomDto readRoomDto);
 
+    List<ReadRoomDto> adminReadRoom(String keyword);
+
+    void adminSeat(int re_room_no, int re_seat,int re_state);
+
 }

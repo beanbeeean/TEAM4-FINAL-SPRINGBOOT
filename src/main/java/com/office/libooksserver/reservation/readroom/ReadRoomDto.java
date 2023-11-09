@@ -13,6 +13,7 @@ public class ReadRoomDto {
     private int l_no;
     private String l_email;
     private String l_reg_date;
+    private String l_end_date;
     private String l_room_no;
     private String l_seat;
 }

@@ -22,4 +22,9 @@ public class StudyRoomService {
 
     }
 
+    public List<StudyRoomDto> adminStudyRoom(String keyword){
+
+        return studyRoomMapper.adminStudyRoom(keyword);
+    }
+
 }

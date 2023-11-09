@@ -9,4 +9,7 @@ public interface StudyRoomMapper {
     List<StudyRoomDto> checkRoom(int sr_date, int sr_room);
 
     void reservationRoom(StudyRoomDto studyRoomDto);
+
+    List<StudyRoomDto> adminStudyRoom(String keyword);
+
 }

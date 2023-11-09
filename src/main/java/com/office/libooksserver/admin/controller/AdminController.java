@@ -34,5 +34,6 @@ public class AdminController {
         return adminService.changeUserState(no);
     }
 
+
 }
 
