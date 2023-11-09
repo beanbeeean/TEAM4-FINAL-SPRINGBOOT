@@ -76,12 +76,13 @@ public class AuthService {
         }
 
         Token token = tokenMapper.findByUserEmail(userPrincipal.getU_email());
+
         if (user == null) {
             throw new UsernameNotFoundException("토큰이 유효하지 않습니다. : " + userPrincipal.getU_email());
         }
 
         userMapper.delete(user.getU_no());
-        tokenMapper.delete(token);
+        //tokenMapper.delete(token);
 
 
         ApiResponse apiResponse = ApiResponse.builder().check(true).information(Message.builder().message("회원 탈퇴하셨습니다.").build()).build();

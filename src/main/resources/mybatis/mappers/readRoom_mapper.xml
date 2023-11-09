@@ -18,9 +18,21 @@
 
     <insert id="userReservation" parameterType="com.office.libooksserver.reservation.readroom.ReadRoomDto">
 
-        INSERT INTO tbl_reservaion_log (l_email, l_reg_date, l_room_no, l_seat)
-        VALUES (#{l_email}, now(), #{re_room_no}, #{re_seat})
+        INSERT INTO tbl_reservaion_log (l_email, l_reg_date, l_end_date, l_room_no, l_seat)
+        VALUES (#{l_email}, now(), #{re_reservation}, #{re_room_no}, #{re_seat})
 
     </insert>
+
+    <select id="adminReadRoom" resultType="com.office.libooksserver.reservation.readroom.ReadRoomDto">
+
+        SELECT * FROM tbl_reservaion_log WHERE l_email LIKE CONCAT('%',#{keyword}, '%')
+
+    </select>
+
+    <update id="adminSeat">
+
+        UPDATE tbl_reading_room SET re_state = #{re_state} where re_room_no = #{re_room_no} and re_seat = #{re_seat}
+
+    </update>
 
 </mapper>

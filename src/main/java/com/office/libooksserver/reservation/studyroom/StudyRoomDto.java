@@ -14,5 +14,6 @@ public class StudyRoomDto {
     private int sr_time;
     private int time;
     private String sr_email;
+    private String sr_name;
     private String sr_reg_date;
 }
