@@ -104,6 +104,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                     .permitAll()
                     .antMatchers("/ws-stomp/**")
                     .permitAll()
+                .antMatchers("/user/**")
+                .permitAll()
                     //.antMatchers("/auth/**").hasRole(Role.USER.getValue())
                     .anyRequest()
                         .authenticated()
