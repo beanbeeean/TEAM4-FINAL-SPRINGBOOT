@@ -77,4 +77,6 @@
     <delete id="deleteComment" parameterType="com.office.libooksserver.user.dto.ReplyDto">
         DELETE FROM tbl_reply WHERE r_no = #{r_no}
     </delete>
+
+
 </mapper>
