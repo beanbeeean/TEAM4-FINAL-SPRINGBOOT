@@ -55,13 +55,13 @@
 
     <select id="myReadReservation" parameterType="String" resultType="com.office.libooksserver.reservation.readroom.ReadRoomDto">
 
-        SELECT * FROM tbl_reservaion_log WHERE l_email = #{u_email} and #{start} &lt; l_reg_date and l_reg_date &lt;= #{end}
+        SELECT * FROM tbl_reservaion_log WHERE l_email = #{u_email} and #{start} &lt; l_reg_date and l_reg_date &lt;= DATE_ADD(#{end}, INTERVAL 1 DAY)
 
     </select>
 
     <select id="myStudyReservation" parameterType="String" resultType="com.office.libooksserver.reservation.studyroom.StudyRoomDto">
 
-        SELECT * FROM tbl_study_reservation WHERE sr_email = #{u_email} and #{start} &lt; sr_reg_date and sr_reg_date &lt;= #{end} order by sr_date ,sr_time
+        SELECT * FROM tbl_study_reservation WHERE sr_email = #{u_email} and #{start} &lt; sr_reg_date and sr_reg_date &lt;= DATE_ADD(#{end}, INTERVAL 1 DAY) order by sr_date ,sr_time
 
     </select>
 

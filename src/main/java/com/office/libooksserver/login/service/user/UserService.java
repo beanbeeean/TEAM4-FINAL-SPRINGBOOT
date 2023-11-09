@@ -36,6 +36,9 @@ public class UserService {
 
     public List<StudyRoomDto> myStudyReservation(String start, String end, String email){
 
+        System.out.println("start : "+start);
+        System.out.println("end : "+end);
+
         return userMapper.myStudyReservation(start, end, email);
 
     }

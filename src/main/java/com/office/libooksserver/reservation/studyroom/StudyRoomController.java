@@ -51,7 +51,7 @@ public class StudyRoomController {
         System.out.println("studyRoomDto : " + studyRoomDto);
 
         for(int i=0; i<studyRoomDto.getTime();i++) {
-            studyRoomDto.setSr_time(studyRoomDto.getSr_time()+1);
+            studyRoomDto.setSr_time(studyRoomDto.getSr_time());
             studyRoomService.reservationRoom(studyRoomDto);
         }
 
