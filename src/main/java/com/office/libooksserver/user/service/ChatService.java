@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ChatService {
@@ -152,7 +149,7 @@ public class ChatService {
         ArrayList<Map<String,String>> oriMap = chatRoom.getChat();
 
         if(!oriMap.get(chatRoom.getChat().size()-1).get("date").equals(LocalDate.now().toString())){
-            Map<String, String> map = new HashMap<>();
+            Map<String, String> map = new LinkedHashMap<>();
 
             map.put("idx", String.valueOf(Integer.parseInt(oriMap.get(chatRoom.getChat().size()-1).get("idx")) + 1));
             map.put("user", "ADMIN");
@@ -166,7 +163,7 @@ public class ChatService {
         }
 
 
-        Map<String, String> talkMap = new HashMap<>();
+        Map<String, String> talkMap = new LinkedHashMap<>();
         String half = "";
         if(LocalTime.now().getHour() / 12 >= 1){
             half = "PM";
@@ -211,7 +208,7 @@ public class ChatService {
     }
 
     public Map<String, Object> getUserList(String roomId) {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new LinkedHashMap<>();
         ArrayList<UserListDto> userList = iChatMapper.getUserList(roomId);
         ArrayList<UserDto> userDetail = new ArrayList<>();
         for (UserListDto user: userList) {
