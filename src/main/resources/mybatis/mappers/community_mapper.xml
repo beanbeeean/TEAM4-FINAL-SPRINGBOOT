@@ -6,36 +6,39 @@
 
     <select id="selectCommunity" resultType="com.office.libooksserver.user.dto.CommunityDto">
         SELECT
-            *
+        tbl_community.*,
+        tbl_user.u_name AS user_name
         FROM tbl_community
+        LEFT JOIN tbl_user ON tbl_community.u_email = tbl_user.u_email
         <if test="category != 0">
             WHERE
-            c_category = #{category}
+            tbl_community.c_category = #{category}
             <if test="keyword != '' ">
                 <choose>
                     <when test="searchOption == 1">
                         AND
                         (
-                        c_title LIKE CONCAT('%', #{keyword}, '%')
+                        tbl_community.c_title LIKE CONCAT('%', #{keyword}, '%')
                         OR
-                        u_email LIKE CONCAT('%', #{keyword}, '%')
+                        tbl_user.u_name LIKE CONCAT('%', #{keyword}, '%')
                         )
                     </when>
                     <when test="searchOption == 2">
                         AND
-                        c_title LIKE CONCAT('%', #{keyword}, '%')
+                        tbl_community.c_title LIKE CONCAT('%', #{keyword}, '%')
                     </when>
                     <when test="searchOption == 3">
-                        AND u_email LIKE CONCAT('%', #{keyword}, '%')
+                        AND tbl_user.u_name LIKE CONCAT('%', #{keyword}, '%')
                     </when>
                 </choose>
             </if>
         </if>
         <if test="category == 0 and keyword !=''">
-            WHERE  c_title LIKE CONCAT('%', #{keyword}, '%')
+            WHERE  tbl_community.c_title LIKE CONCAT('%', #{keyword}, '%')
         </if>
-        ORDER BY c_reg_date desc
+        ORDER BY tbl_community.c_reg_date DESC
     </select>
+
 
     <insert id="insertNewCommunity" parameterType="hashMap">
         INSERT INTO tbl_community (u_email, c_category, c_title, c_content, c_reg_date, c_mod_date) VALUES (#{uMail}, #{category}, #{title}, #{content},  now(), now())

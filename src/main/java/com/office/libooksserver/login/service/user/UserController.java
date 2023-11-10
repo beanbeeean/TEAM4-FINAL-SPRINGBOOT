@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Controller
@@ -38,7 +39,7 @@ public class UserController {
     @PostMapping("/myReadReservation")
     public ResponseEntity<?> myReadReservation(@RequestBody Map<String, String> time, @Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal) {
 
-        System.out.println("time : "+ time.get("startDate"));
+//        System.out.println("time : "+ time.get("startDate"));
 
         return ResponseEntity.ok(userService.myReadReservation(time.get("startDate"), time.get("endDate"), userPrincipal.getU_email()));
 
@@ -46,7 +47,6 @@ public class UserController {
 
     @PostMapping("/myStudyReservation")
     public ResponseEntity<?> myStudyReservation(@RequestBody Map<String, String> time, @Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal) {
-
         return ResponseEntity.ok(userService.myStudyReservation(time.get("startDate"), time.get("endDate"), userPrincipal.getU_email()));
 
     }

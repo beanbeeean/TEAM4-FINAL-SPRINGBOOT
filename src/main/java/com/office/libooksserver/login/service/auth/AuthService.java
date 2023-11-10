@@ -168,6 +168,7 @@ public class AuthService {
 
         UserDto user = UserDto.builder()
                         .u_email(signUpRequest.getEmail())
+                .u_name(signUpRequest.getName())
                         .u_password(passwordEncoder.encode(signUpRequest.getPassword()))
                         .u_provider("local")
                         .u_role(Role.ADMIN.getValue())

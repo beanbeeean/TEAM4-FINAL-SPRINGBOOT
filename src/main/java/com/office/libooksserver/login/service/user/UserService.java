@@ -36,7 +36,12 @@ public class UserService {
 
     public List<StudyRoomDto> myStudyReservation(String start, String end, String email){
 
-        return userMapper.myStudyReservation(start, end, email);
+        System.out.println("state여기 : " + start);
+        System.out.println("end여기 : " + end);
+
+        int newStart = Integer.parseInt(start.substring(0,10).replaceAll("-",""));
+        int newEnd = Integer.parseInt(end.substring(0,10).replaceAll("-",""));
+        return userMapper.myStudyReservation(newStart, newEnd, email);
 
     }
 

@@ -26,5 +26,5 @@ public interface UserMapper {
 
     List<ReadRoomDto> myReadReservation(String start, String end, String u_email);
 
-    List<StudyRoomDto>  myStudyReservation(String start, String end, String u_email);
+    List<StudyRoomDto>  myStudyReservation(int start, int end, String u_email);
 }
