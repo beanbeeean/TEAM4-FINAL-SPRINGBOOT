@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Controller
@@ -27,7 +28,7 @@ public class ChatRoomController {
     @GetMapping("/chat/list")
     @ResponseBody
     public Map<String,Object> getChatRoom(@RequestParam String user){
-        Map<String,Object> returnMap = new HashMap<>();
+        Map<String,Object> returnMap = new LinkedHashMap<>();
 
         returnMap.put("list", chatService.findRoomByUserMail(user));
 //        returnMap.put("list", chatService.findRoomAllRoom());
@@ -57,7 +58,7 @@ public class ChatRoomController {
         ChatRoomDto room = chatService.createChatRoom(roomInfo.get("newName"), roomInfo.get("userMaxCount"), roomInfo.get("userMail"), roomInfo.get("userName"), roomInfo.get("cNo"));
         log.info("CREATE Chat Room {}", room);
 
-        Map<String, Object> returnMap = new HashMap<>();
+        Map<String, Object> returnMap = new LinkedHashMap<>();
         returnMap.put("roomName",room);
         return returnMap;
     }
@@ -71,7 +72,7 @@ public class ChatRoomController {
     public Map<String,Object> roomDetail(String roomId){
         log.info("roomId {}", roomId);
         ChatRoomDto chatRoom = chatService.findRoomByRoomId(roomId);
-        Map<String, Object> returnMap = new HashMap<>();
+        Map<String, Object> returnMap = new LinkedHashMap<>();
         returnMap.put("room",chatRoom);
         return returnMap;
     }
@@ -89,7 +90,7 @@ public class ChatRoomController {
     public Map<String,Object> getRoomByCno(String cNo){
         log.info("cNo {}", cNo);
         ChatRoomDto chatRoom = chatService.findRoomByCno(cNo);
-        Map<String, Object> returnMap = new HashMap<>();
+        Map<String, Object> returnMap = new LinkedHashMap<>();
         returnMap.put("room",chatRoom);
         return returnMap;
     }
