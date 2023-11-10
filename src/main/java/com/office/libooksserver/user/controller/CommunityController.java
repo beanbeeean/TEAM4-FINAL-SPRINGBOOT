@@ -39,12 +39,7 @@ public class CommunityController {
 
     @PostMapping("/write")
     @ResponseBody
-    public Object writeCommunity(@RequestBody Map<String, String> map
-//            @RequestParam(name = "selection", required = false) int category,
-//                                 @RequestParam(name = "title", required = false) String title,
-//                                 @RequestParam(name = "content", required = false) String content,
-//                                 @RequestParam(name = "u_email", required = false) String u_email
-    ) {
+    public Object writeCommunity(@RequestBody Map<String, String> map) {
         log.info("[CommunityController] writeCommunity()");
         log.info("category" + map.get("selection"));
         log.info("title" + map.get("title"));
@@ -71,14 +66,8 @@ public class CommunityController {
 
     @PostMapping("/community_modify/{id}")
     @ResponseBody
-    public Object modifyCommunity(@PathVariable int id, @RequestBody Map<String, String> map
-//            @PathVariable int id,
-//                                  @RequestParam(name = "selection", required = false) int category,
-//                                 @RequestParam(name = "title", required = false) String title,
-//                                 @RequestParam(name = "content", required = false) String content
-    ) {
+    public Object modifyCommunity(@PathVariable int id, @RequestBody Map<String, String> map) {
         log.info("[CommunityController] modifyCommunity()");
-        log.info("category" + map.get("selection"));
         log.info("title" + map.get("title"));
         log.info("content" + map.get("content"));
 
