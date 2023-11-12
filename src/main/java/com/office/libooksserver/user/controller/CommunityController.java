@@ -34,6 +34,10 @@ public class CommunityController {
                                             @RequestParam(name = "searchOption", defaultValue = "1") int searchOption){
         log.info("[CommunityController] getCommunity()");
 
+        log.info("keyword :: " + keyword);
+        log.info("category :: " + category);
+        log.info("searchOption :: " + searchOption);
+
         return communityService.getCommunity(keyword,category,searchOption);
     }
 

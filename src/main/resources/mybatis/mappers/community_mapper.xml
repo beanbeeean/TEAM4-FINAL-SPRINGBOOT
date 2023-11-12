@@ -10,6 +10,7 @@
         tbl_user.u_name AS user_name
         FROM tbl_community
         LEFT JOIN tbl_user ON tbl_community.u_email = tbl_user.u_email
+
         <if test="category != 0">
             WHERE
             tbl_community.c_category = #{category}
@@ -28,14 +29,22 @@
                         tbl_community.c_title LIKE CONCAT('%', #{keyword}, '%')
                     </when>
                     <when test="searchOption == 3">
-                        AND tbl_user.u_name LIKE CONCAT('%', #{keyword}, '%')
+                        AND
+                        tbl_user.u_name LIKE CONCAT('%', #{keyword}, '%')
+
                     </when>
                 </choose>
             </if>
         </if>
         <if test="category == 0 and keyword !=''">
-            WHERE  tbl_community.c_title LIKE CONCAT('%', #{keyword}, '%')
+            WHERE
+            (
+            tbl_user.u_name LIKE CONCAT('%', #{keyword}, '%')
+            OR
+            tbl_community.c_title LIKE CONCAT('%', #{keyword}, '%')
+            )
         </if>
+
         ORDER BY tbl_community.c_reg_date DESC
     </select>
 
