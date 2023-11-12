@@ -35,4 +35,7 @@
 
     </update>
 
+    <select id="checkDuplicate" parameterType="String" resultType="Integer">
+        SELECT COUNT(*) FROM tbl_reservaion_log WHERE l_email= #{l_email} AND l_end_date &gt; NOW();
+    </select>
 </mapper>

@@ -16,4 +16,5 @@ public interface ReadRoomMapper {
 
     void adminSeat(int re_room_no, int re_seat,int re_state);
 
+    int checkDuplicate(String l_email);
 }

@@ -39,4 +39,8 @@ public class ReadRoomService {
         readMapper.adminSeat(re_room_no, re_seat, re_state);
 
     }
+
+    public int checkDuplicate(ReadRoomDto readRoomDto) {
+        return readMapper.checkDuplicate(readRoomDto.getL_email());
+    }
 }

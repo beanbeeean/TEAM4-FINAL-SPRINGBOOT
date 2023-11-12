@@ -25,13 +25,19 @@ public class ReadRoomController {
 
     @PostMapping("/reservation")
     @ResponseBody
-    public void reservationSeat(@RequestBody ReadRoomDto readRoomDto, @Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal) {
-
+    public int reservationSeat(@RequestBody ReadRoomDto readRoomDto, @Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal) {
+        int result = 0;
 
         System.out.println(readRoomDto);
         readRoomDto.setL_email(userPrincipal.getU_email());
 
-        readService.reservationSeat(readRoomDto);
-        readService.userReservation(readRoomDto);
+        if(readService.checkDuplicate(readRoomDto) > 0){
+            return result;
+        }else{
+            readService.reservationSeat(readRoomDto);
+            readService.userReservation(readRoomDto);
+            return 1;
+        }
+
     }
 }
