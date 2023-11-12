@@ -75,10 +75,11 @@ public class ChatController {
                 chat.setSender(ct.get("user"));
                 chat.setDate(ct.get("date"));
                 chat.setTime(ct.get("time"));
-
+                chat.setIdx(Integer.parseInt(ct.get("idx")));
                 chat.setFirst(false);
                 template.convertAndSend("/sub/chat/room/" + chat.getRoomId(), chat);
                 System.out.println("chat : " + chat);
+                System.out.println("보낸 번호  : " + ct.get("idx"));
             }
         }else{
             chat.setType(ChatDto.MessageType.REJECT);
