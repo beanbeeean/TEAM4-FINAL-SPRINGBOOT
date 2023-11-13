@@ -69,11 +69,13 @@ public class ChatRoomController {
 
     @GetMapping("/chat/room")
     @ResponseBody
-    public Map<String,Object> roomDetail(String roomId){
-        log.info("roomId {}", roomId);
-        ChatRoomDto chatRoom = chatService.findRoomByRoomId(roomId);
+//    public Map<String,Object> roomDetail(String roomId){
+    public Map<String,Object> roomDetail(){
+//        log.info("roomId {}", roomId);
+//        ChatRoomDto chatRoom = chatService.findRoomByRoomId(roomId);
+
         Map<String, Object> returnMap = new LinkedHashMap<>();
-        returnMap.put("room",chatRoom);
+        returnMap.put("room",chatService.findRoomAllRoom());
         return returnMap;
     }
 

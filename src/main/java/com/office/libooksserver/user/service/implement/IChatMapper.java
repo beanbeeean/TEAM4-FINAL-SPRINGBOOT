@@ -23,4 +23,6 @@ public interface IChatMapper {
     ArrayList<UserListDto> getUserList(String roomId);
 
     UserDto getUserDetail(String u_mail);
+
+    ArrayList<UserListDto> getChatUserList();
 }

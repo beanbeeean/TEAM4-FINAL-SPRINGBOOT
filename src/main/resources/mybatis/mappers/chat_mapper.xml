@@ -31,4 +31,11 @@
     <select id="getUserDetail" parameterType="String" resultType="com.office.libooksserver.login.service.user.UserDto">
         SELECT * FROM tbl_user WHERE u_email = #{u_mail}
     </select>
+
+    <select id="getChatUserList" resultType="com.office.libooksserver.user.dto.UserListDto">
+        SELECT *
+        FROM tbl_user_chat
+        INNER JOIN tbl_user
+        ON tbl_user_chat.u_mail = tbl_user.u_email;
+    </select>
 </mapper>

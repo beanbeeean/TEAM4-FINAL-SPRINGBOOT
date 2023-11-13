@@ -209,15 +209,16 @@ public class ChatService {
 
     public Map<String, Object> getUserList(String roomId) {
         Map<String, Object> map = new LinkedHashMap<>();
-        ArrayList<UserListDto> userList = iChatMapper.getUserList(roomId);
-        ArrayList<UserDto> userDetail = new ArrayList<>();
-        for (UserListDto user: userList) {
-            UserDto dto = iChatMapper.getUserDetail(user.getU_mail());
-            userDetail.add(dto);
-        }
+//        ArrayList<UserListDto> userList = iChatMapper.getUserList(roomId);
+        ArrayList<UserListDto> userList = iChatMapper.getChatUserList();
+//        ArrayList<UserDto> userDetail = new ArrayList<>();
+//        for (UserListDto user: userList) {
+//            UserDto dto = iChatMapper.getUserDetail(user.getU_mail());
+//            userDetail.add(dto);
+//        }
 
         map.put("userList",userList);
-        map.put("userDetail",userDetail);
+//        map.put("userDetail",userDetail);
 
         return map;
     }
