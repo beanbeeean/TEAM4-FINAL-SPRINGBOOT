@@ -23,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Tag(name = "Authorization", description = "Authorization API")
@@ -114,9 +116,25 @@ public class AuthController {
         @ApiResponse(responseCode = "400", description = "토큰 갱신 실패", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class) ) } ),
     })
     @PostMapping(value = "/refresh")
-    public ResponseEntity<?> refresh(
-        @Parameter(description = "Schemas의 RefreshTokenRequest를 참고해주세요.", required = true) @Valid @RequestBody RefreshTokenRequest tokenRefreshRequest
-    ) {
+    public ResponseEntity<?> refresh(HttpServletRequest request) {
+
+        RefreshTokenRequest tokenRefreshRequest = null;
+
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("refreshToken".equals(cookie.getName())) {
+                    // 쿠키 값을 찾았을 때의 처리
+                    System.out.println(cookie.getValue());
+                    tokenRefreshRequest = new RefreshTokenRequest(cookie.getValue());
+                }
+            }
+        }
+
+        System.out.println("tokenRefreshRequest : "+tokenRefreshRequest.getRefreshToken());
+
+
         return authService.refresh(tokenRefreshRequest);
     }
 
@@ -126,10 +144,24 @@ public class AuthController {
         @ApiResponse(responseCode = "400", description = "로그아웃 실패", content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class) ) } ),
     })
     @PostMapping(value="/signout")
-    public ResponseEntity<?> signout(
-        @Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal, 
-        @Parameter(description = "Schemas의 RefreshTokenRequest를 참고해주세요.", required = true) @Valid @RequestBody RefreshTokenRequest tokenRefreshRequest
-    ) {
+    public ResponseEntity<?> signout(HttpServletRequest request) {
+
+        RefreshTokenRequest tokenRefreshRequest = null;
+
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("refreshToken".equals(cookie.getName())) {
+                    // 쿠키 값을 찾았을 때의 처리
+                    System.out.println(cookie.getValue());
+                    tokenRefreshRequest = new RefreshTokenRequest(cookie.getValue());
+                }
+            }
+        }
+
+        System.out.println("tokenRefreshRequest : "+tokenRefreshRequest.getRefreshToken());
+
         return authService.signout(tokenRefreshRequest);
     }
 

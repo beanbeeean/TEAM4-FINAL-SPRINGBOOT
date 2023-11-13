@@ -3,12 +3,12 @@ package com.office.libooksserver.login.config.security.handler;
 import com.office.libooksserver.login.advice.assertThat.DefaultAssert;
 import com.office.libooksserver.login.config.security.OAuth2Config;
 import com.office.libooksserver.login.config.security.util.CustomCookie;
-import com.office.libooksserver.login.domain.entity.user.Token;
 import com.office.libooksserver.login.domain.mapping.TokenMapping;
 import com.office.libooksserver.login.redis.service.RedisService;
 import com.office.libooksserver.login.repository.auth.CustomAuthorizationRequestRepository;
 import com.office.libooksserver.login.service.auth.CustomTokenProviderService;
 import com.office.libooksserver.login.service.token.TokenMapper;
+import com.office.libooksserver.login.service.user.UserDto;
 import com.office.libooksserver.login.service.user.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -67,20 +67,18 @@ public class CustomSimpleUrlAuthenticationSuccessHandler extends SimpleUrlAuthen
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
         TokenMapping tokenMapping = customTokenProviderService.createToken(authentication);
-        Token token = Token.builder()
-                            .userEmail(tokenMapping.getUserEmail())
-                            .refreshToken(tokenMapping.getRefreshToken())
-                            .build();
 
-        int chk = tokenMapper.isToken(tokenMapping.getUserEmail());
+        UserDto userDto = userMapper.findByEmail(tokenMapping.getUserEmail());
 
-//        if(chk == 0)
-//            tokenMapper.save(token);
-//        else
-//            tokenMapper.update(token);
+        if(userDto.getU_state().equals("0")) {
+            System.out.println("targetUrl : " + targetUrl);
+            return UriComponentsBuilder.fromUriString("http://localhost:3000/")
+                    .queryParam("error", "error")
+                    .build().toUriString();
+        }
 
 
-        //redisService.setValuesWithTimeout(tokenMapping.getUserEmail(),tokenMapping.getRefreshToken(),1209600);
+        redisService.setValuesWithTimeout(tokenMapping.getRefreshToken(),tokenMapping.getUserEmail(),1209600);
 
         Cookie refreshToken = new Cookie("refreshToken", tokenMapping.getRefreshToken());
         refreshToken.setPath("/");

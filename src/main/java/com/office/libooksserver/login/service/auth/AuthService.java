@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,8 +46,6 @@ public class AuthService {
     TokenMapper tokenMapper;
 
     private final RedisService redisService;
-
-
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final CustomTokenProviderService customTokenProviderService;
@@ -121,6 +120,13 @@ public class AuthService {
                 signInRequest.getPassword()
             )
         );
+        UserDto userDto = userMapper.findByEmail(authentication.getName());
+
+        if(userDto.getU_state().equals("0")) {
+
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("권한이 없습니다.");
+        }
+
         System.out.println("authentication : " + authentication.toString());
 
         // 사용자가 성공적으로 인증된 후에 그 사용자의 인증 정보를 현재 보안 컨텍스트에 저장하여, 이후에 다른 부분에서 현재 인증된 사용자의 정보를 쉽게 사용할 수 있게 합니다.
@@ -132,14 +138,7 @@ public class AuthService {
                             .userEmail(tokenMapping.getUserEmail())
                             .build();
 
-        int chk = tokenMapper.isToken(signInRequest.getEmail());
-
-//        if(chk == 0)
-//            tokenMapper.save(token);
-//        else
-//            tokenMapper.update(token);
-
-        //redisService.setValuesWithTimeout(tokenMapping.getUserEmail(),tokenMapping.getRefreshToken(),1209600);
+        redisService.setValuesWithTimeout(tokenMapping.getRefreshToken(),tokenMapping.getUserEmail(),1209600);
 
         AuthResponse authResponse = AuthResponse.builder().accessToken(tokenMapping.getAccessToken()).build();
 
@@ -149,7 +148,6 @@ public class AuthService {
                 .maxAge(7 * 24 * 60 * 60) // Max Age 설정 (7일)
                 .httpOnly(true)          // HttpOnly 설정
                 .build();
-
 
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString()).body(authResponse);
     }
@@ -203,33 +201,50 @@ public class AuthService {
 
         log.info("refresh[]" );
 
+        System.out.println("tokenRefreshRequest : "+tokenRefreshRequest);
+
         //1차 검증
         boolean checkValid = valid(tokenRefreshRequest.getRefreshToken());
         DefaultAssert.isAuthentication(checkValid);
 
-        Token token = tokenMapper.findByRefreshToken(tokenRefreshRequest.getRefreshToken());
-        Authentication authentication = customTokenProviderService.getAuthenticationByEmail(token.getUserEmail());
+        String email = redisService.getValues(tokenRefreshRequest.getRefreshToken());
+        System.out.println("email : "+email);
+
+        Authentication authentication = customTokenProviderService.getAuthenticationByEmail(email);
+
+
+        System.out.println("authentication : "+authentication);
 
 
         //4. refresh token 정보 값을 업데이트 한다.
         //시간 유효성 확인
         TokenMapping tokenMapping;
 
-        Long expirationTime = customTokenProviderService.getExpiration(tokenRefreshRequest.getRefreshToken());
-        if(expirationTime > 0){
-            tokenMapping = customTokenProviderService.refreshToken(authentication, token.getRefreshToken());
-        }else{
-            tokenMapping = customTokenProviderService.createToken(authentication);
-        }
+        tokenMapping = customTokenProviderService.createToken(authentication);
 
-        Token updateToken = token.updateRefreshToken(tokenMapping.getRefreshToken());
-        tokenMapper.update(updateToken);
+
+
+        System.out.println("setValuesWithTimeout : " + tokenMapping.getRefreshToken());
+        System.out.println("deleteValues : " + tokenRefreshRequest);
+
+        redisService.setValuesWithTimeout(tokenMapping.getRefreshToken(),email,1209600);
+        redisService.deleteValues(tokenRefreshRequest.getRefreshToken());
+
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", tokenMapping.getRefreshToken())
+                .path("/")               // Path 설정
+                .domain("localhost")     // Domain 설정
+                .maxAge(7 * 24 * 60 * 60) // Max Age 설정 (7일)
+                .httpOnly(true)          // HttpOnly 설정
+                .build();
+
+        //tokenMapper.update(updateToken);
 
         //AuthResponse authResponse = AuthResponse.builder().accessToken(tokenMapping.getAccessToken()).refreshToken(updateToken.getRefreshToken()).build();
 
         AuthResponse authResponse = AuthResponse.builder().accessToken(tokenMapping.getAccessToken()).build();  // refreshToken을 응답 본문에서 제거
 
-        return ResponseEntity.ok(authResponse);
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString()).body(authResponse);
+
     }
 
     public ResponseEntity<?> signout(RefreshTokenRequest tokenRefreshRequest){
@@ -240,11 +255,9 @@ public class AuthService {
         DefaultAssert.isAuthentication(checkValid);
 
         //4 token 정보를 삭제한다.
-        Token token = tokenMapper.findByRefreshToken(tokenRefreshRequest.getRefreshToken());
+        redisService.deleteValues(tokenRefreshRequest.getRefreshToken());
 
-        tokenMapper.delete(token);
-
-        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", token.getRefreshToken())
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", "")
                 .path("/")               // Path 설정
                 .domain("localhost")     // Domain 설정
                 .maxAge(0) // Max Age 설정 (7일)
@@ -265,17 +278,19 @@ public class AuthService {
         DefaultAssert.isTrue(validateCheck, "Token 검증에 실패하였습니다.");
 
         //2. refresh token 값을 불러온다.
-        Token token = tokenMapper.findByRefreshToken(refreshToken);
+        //Token token = tokenMapper.findByRefreshToken(refreshToken);
+        String token = redisService.getValues(refreshToken);
+        log.info("token[]",token );
         boolean chk=false;
-        if (token.getUserEmail()!=null) {
+        if (token!=null) {
             chk=true;
         }
         DefaultAssert.isTrue(chk, "탈퇴 처리된 회원입니다.");
 
 
         //3. email 값을 통해 인증값을 불러온다
-        Authentication authentication = customTokenProviderService.getAuthenticationByEmail(token.getUserEmail());
-        DefaultAssert.isTrue(token.getUserEmail().equals(authentication.getName()), "사용자 인증에 실패하였습니다.");
+//        Authentication authentication = customTokenProviderService.getAuthenticationByEmail(token.getUserEmail());
+//        DefaultAssert.isTrue(token.getUserEmail().equals(authentication.getName()), "사용자 인증에 실패하였습니다.");
 
         return true;
     }

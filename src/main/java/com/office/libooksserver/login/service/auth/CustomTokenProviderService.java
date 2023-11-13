@@ -138,7 +138,6 @@ public class CustomTokenProviderService {
         log.info("validateToken[]" );
 
         try {
-            //log.info("bearerToken = {} \n oAuth2Config.getAuth()={}", token, oAuth2Config.getAuth().getTokenSecret());
 
             Jwts.parserBuilder().setSigningKey(oAuth2Config.getAuth().getTokenSecret()).build().parseClaimsJws(token);
 

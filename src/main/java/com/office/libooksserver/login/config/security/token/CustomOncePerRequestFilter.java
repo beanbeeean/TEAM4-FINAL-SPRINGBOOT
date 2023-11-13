@@ -24,20 +24,28 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter{
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-//        log.info("doFilterInternal[]");
+        log.info("doFilterInternal[]");
 
         String jwt = getJwtFromRequest(request);
 
         if (StringUtils.hasText(jwt) && customTokenProviderService.validateToken(jwt)) {
 
+            log.info("doFilterInternal[] 2'");
+
             UsernamePasswordAuthenticationToken authentication = customTokenProviderService.getAuthenticationById(jwt);
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        } else if( (StringUtils.hasText(jwt) && !customTokenProviderService.validateToken(jwt)) && !request.getRequestURI().equals("/auth/refresh") ){
+
+            System.out.println("getRequestURI : "+request.getRequestURI());
+
+            HttpServletResponse httpResponse = (HttpServletResponse) response;
+            httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
+            httpResponse.getWriter().write("Error message or description"); // 에러 메시지 전송
+            return; // 필터 체인 중단
         }
-
         filterChain.doFilter(request, response);
-
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {
