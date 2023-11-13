@@ -104,13 +104,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                     .permitAll()
                     .antMatchers("/ws-stomp/**")
                     .permitAll()
-                .antMatchers("/user/**")
-                .permitAll()
+                    .antMatchers("/user/**")
+                    .permitAll()
                     //.antMatchers("/auth/**").hasRole(Role.USER.getValue())
                     .anyRequest()
-                        .authenticated()
+                    .authenticated()
                     .and()
-                .oauth2Login() // OAuth2 Login: OAuth2 인증 로그인 설정을 담당합니다.
+                    .oauth2Login() // OAuth2 Login: OAuth2 인증 로그인 설정을 담당합니다.
                     .authorizationEndpoint() // Authorization Endpoint: OAuth2 인증을 위한 엔드포인트를 설정합니다.
                         .baseUri("/oauth2/authorize")
                         .authorizationRequestRepository(customAuthorizationRequestRepository)
