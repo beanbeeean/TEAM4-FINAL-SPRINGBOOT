@@ -26,7 +26,7 @@
     </select>
 
     <select id="selectByChkUserList" resultType="HashMap" parameterType="Integer">
-        SELECT * FROM tbl_chk_book WHERE b_no = #{bNo}
+        SELECT * FROM tbl_chk_book WHERE b_no = #{bNo} ORDER BY chk_b_state desc, chk_b_reg_date desc
     </select>
 
     <update id="updateBookInfo" parameterType="Integer">
