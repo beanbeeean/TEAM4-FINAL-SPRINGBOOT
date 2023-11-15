@@ -88,14 +88,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .permitAll()
 
                 //USER RESERVATION
-                .antMatchers("/read/**")
-                .permitAll()
                 .antMatchers("/read/Reservation")
                 .hasRole("USER")
-                .antMatchers("/study/**")
+                .antMatchers("/read/**")
                 .permitAll()
                 .antMatchers("/study/Reservation")
                 .hasRole("USER")
+                .antMatchers("/study/**")
+                .permitAll()
+
 
                 //USER MYPAGE
                 .antMatchers("/user/myPage")
@@ -124,15 +125,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .hasRole("USER")
 
                 //book
-                .antMatchers("/checkout_books/**")
-                .permitAll()
                 .antMatchers("/checkout_books/checkout")
                 .hasRole("USER")
                 .antMatchers("/checkout_books/checkout_book_list")
                 .hasRole("USER")
+                .antMatchers("/checkout_books/**")
+                .permitAll()
+
 
 
                 //admin
+                .antMatchers("/admin/management/return_book")
+                .hasAnyRole("USER", "ADMIN", "SUPER")
                 .antMatchers("/admin/management/memberManagement")
                 .permitAll()
                 .antMatchers("/admin/management/change_user_state")
