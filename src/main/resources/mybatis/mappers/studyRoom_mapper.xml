@@ -2,22 +2,22 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.office.libooksserver.reservation.studyroom.StudyRoomMapper">
+<mapper namespace="com.office.libooksserver.user.service.implement.StudyRoomMapper">
 
-    <select id="checkRoom" resultType="com.office.libooksserver.reservation.studyroom.StudyRoomDto">
+    <select id="checkRoom" resultType="com.office.libooksserver.user.dto.StudyRoomDto">
 
         SELECT * FROM tbl_study_reservation where sr_date = #{sr_date} and (sr_room = #{sr_room} or sr_room = #{sr_room} + 1)
 
     </select>
 
-    <insert id="reservationRoom" parameterType="com.office.libooksserver.reservation.studyroom.StudyRoomDto">
+    <insert id="reservationRoom" parameterType="com.office.libooksserver.user.dto.StudyRoomDto">
 
         INSERT INTO tbl_study_reservation (sr_room, sr_date,sr_time, sr_email, sr_name, sr_reg_date)
         VALUES (#{sr_room}, #{sr_date},#{sr_time}, #{sr_email}, #{sr_name},now())
 
     </insert>
 
-    <select id="adminStudyRoom" resultType="com.office.libooksserver.reservation.studyroom.StudyRoomDto">
+    <select id="adminStudyRoom" resultType="com.office.libooksserver.user.dto.StudyRoomDto">
 
         SELECT * FROM tbl_study_reservation WHERE sr_email LIKE CONCAT('%',#{keyword}, '%')
 

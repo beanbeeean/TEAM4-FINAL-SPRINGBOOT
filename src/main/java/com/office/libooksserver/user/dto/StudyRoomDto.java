@@ -1,4 +1,4 @@
-package com.office.libooksserver.reservation.studyroom;
+package com.office.libooksserver.user.dto;
 
 import lombok.Data;
 

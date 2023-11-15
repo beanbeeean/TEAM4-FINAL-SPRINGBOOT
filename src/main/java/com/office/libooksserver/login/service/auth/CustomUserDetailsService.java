@@ -1,8 +1,8 @@
 package com.office.libooksserver.login.service.auth;
 
 import com.office.libooksserver.login.config.security.token.UserPrincipal;
-import com.office.libooksserver.login.service.user.UserDto;
-import com.office.libooksserver.login.service.user.UserMapper;
+import com.office.libooksserver.user.dto.UserDto;
+import com.office.libooksserver.user.service.implement.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;

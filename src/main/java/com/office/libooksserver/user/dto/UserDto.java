@@ -1,4 +1,4 @@
-package com.office.libooksserver.login.service.user;
+package com.office.libooksserver.user.dto;
 
 import lombok.Builder;
 import lombok.Data;

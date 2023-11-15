@@ -1,7 +1,9 @@
-package com.office.libooksserver.reservation.studyroom;
+package com.office.libooksserver.user.controller;
 
 import com.office.libooksserver.login.config.security.token.CurrentUser;
 import com.office.libooksserver.login.config.security.token.UserPrincipal;
+import com.office.libooksserver.user.dto.StudyRoomDto;
+import com.office.libooksserver.user.service.StudyRoomService;
 import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

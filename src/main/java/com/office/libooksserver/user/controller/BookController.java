@@ -1,16 +1,11 @@
 package com.office.libooksserver.user.controller;
 
-import com.office.libooksserver.login.service.user.UserDto;
 import com.office.libooksserver.user.dto.BookDto;
-import com.office.libooksserver.user.dto.CheckoutBookDto;
-import com.office.libooksserver.user.dto.CommunityDto;
 import com.office.libooksserver.user.service.BookService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-import javax.websocket.server.PathParam;
 import java.util.Map;
 
 @RestController

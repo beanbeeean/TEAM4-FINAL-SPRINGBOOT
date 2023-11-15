@@ -1,6 +1,6 @@
 package com.office.libooksserver.admin.service.implement;
 
-import com.office.libooksserver.login.service.user.UserDto;
+import com.office.libooksserver.user.dto.UserDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

@@ -2,28 +2,28 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.office.libooksserver.reservation.readroom.ReadRoomMapper">
+<mapper namespace="com.office.libooksserver.user.service.implement.ReadRoomMapper">
 
-    <select id="checkSeat" resultType="com.office.libooksserver.reservation.readroom.ReadRoomDto">
+    <select id="checkSeat" resultType="com.office.libooksserver.user.dto.ReadRoomDto">
 
         SELECT * FROM tbl_reading_room
 
     </select>
 
-    <update id="reservationSeat" parameterType="com.office.libooksserver.reservation.readroom.ReadRoomDto">
+    <update id="reservationSeat" parameterType="com.office.libooksserver.user.dto.ReadRoomDto">
 
         UPDATE tbl_reading_room SET re_reservation = #{re_reservation} where re_room_no = #{re_room_no} and re_seat = #{re_seat}
 
     </update>
 
-    <insert id="userReservation" parameterType="com.office.libooksserver.reservation.readroom.ReadRoomDto">
+    <insert id="userReservation" parameterType="com.office.libooksserver.user.dto.ReadRoomDto">
 
         INSERT INTO tbl_reservaion_log (l_email, l_reg_date, l_end_date, l_room_no, l_seat)
         VALUES (#{l_email}, now(), #{re_reservation}, #{re_room_no}, #{re_seat})
 
     </insert>
 
-    <select id="adminReadRoom" resultType="com.office.libooksserver.reservation.readroom.ReadRoomDto">
+    <select id="adminReadRoom" resultType="com.office.libooksserver.user.dto.ReadRoomDto">
 
         SELECT * FROM tbl_reservaion_log WHERE l_email LIKE CONCAT('%',#{keyword}, '%')
 

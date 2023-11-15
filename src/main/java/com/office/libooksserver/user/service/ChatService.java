@@ -3,7 +3,6 @@ package com.office.libooksserver.user.service;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-import com.office.libooksserver.login.service.user.UserDto;
 import com.office.libooksserver.user.dto.ChatDto;
 import com.office.libooksserver.user.dto.ChatRoomDto;
 import com.office.libooksserver.user.dto.UserListDto;

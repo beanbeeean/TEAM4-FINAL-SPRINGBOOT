@@ -1,5 +1,6 @@
-package com.office.libooksserver.reservation.studyroom;
+package com.office.libooksserver.user.service.implement;
 
+import com.office.libooksserver.user.dto.StudyRoomDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

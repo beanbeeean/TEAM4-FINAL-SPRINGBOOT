@@ -1,9 +1,11 @@
-package com.office.libooksserver.login.service.user;
+package com.office.libooksserver.user.controller;
 
 import com.office.libooksserver.common.s3.S3ServiceImpl;
 import com.office.libooksserver.common.s3.S3Uploader;
 import com.office.libooksserver.login.config.security.token.CurrentUser;
 import com.office.libooksserver.login.config.security.token.UserPrincipal;
+import com.office.libooksserver.user.dto.UserDto;
+import com.office.libooksserver.user.service.UserService;
 import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 @Controller

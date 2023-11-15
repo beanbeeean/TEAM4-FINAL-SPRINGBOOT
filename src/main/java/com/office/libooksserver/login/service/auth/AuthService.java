@@ -14,8 +14,8 @@ import com.office.libooksserver.login.payload.response.AuthResponse;
 import com.office.libooksserver.login.payload.response.Message;
 import com.office.libooksserver.login.redis.service.RedisService;
 import com.office.libooksserver.login.service.token.TokenMapper;
-import com.office.libooksserver.login.service.user.UserDto;
-import com.office.libooksserver.login.service.user.UserMapper;
+import com.office.libooksserver.user.dto.UserDto;
+import com.office.libooksserver.user.service.implement.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +33,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -107,7 +109,7 @@ public class AuthService {
         return ResponseEntity.ok(true);
     }
 
-    public ResponseEntity<?> signin(SignInRequest signInRequest){
+    public ResponseEntity<?> signin(SignInRequest signInRequest , String ip){
 
         log.info("signin[]" );
 
@@ -138,7 +140,11 @@ public class AuthService {
                             .userEmail(tokenMapping.getUserEmail())
                             .build();
 
-        redisService.setValuesWithTimeout(tokenMapping.getRefreshToken(),tokenMapping.getUserEmail(),1209600);
+        Map<String, String> values = new HashMap<>();
+        values.put("ip", ip);
+        values.put("email", tokenMapping.getUserEmail());
+
+        redisService.setValuesWithTimeout(tokenMapping.getRefreshToken(),values,1209600);
 
         AuthResponse authResponse = AuthResponse.builder().accessToken(tokenMapping.getAccessToken()).build();
 
@@ -198,7 +204,7 @@ public class AuthService {
         return ResponseEntity.created(location).body(apiResponse);
     }
 
-    public ResponseEntity<?> refresh(RefreshTokenRequest tokenRefreshRequest){
+    public ResponseEntity<?> refresh(RefreshTokenRequest tokenRefreshRequest, String ip){
 
         log.info("refresh[]" );
 
@@ -208,8 +214,19 @@ public class AuthService {
         boolean checkValid = valid(tokenRefreshRequest.getRefreshToken());
         DefaultAssert.isAuthentication(checkValid);
 
-        String email = redisService.getValues(tokenRefreshRequest.getRefreshToken());
-        System.out.println("email : "+email);
+        String value = redisService.getValues(tokenRefreshRequest.getRefreshToken());
+
+        value = value.replace("{ip=", "").replace("}", "");
+        String[] keyValuePairs = value.split(",");
+        String email = keyValuePairs[1].replace(" email=", "");
+
+        Map<String, String> values = new HashMap<>();
+        values.put("ip", ip);
+        values.put("email", email);
+
+        if(!keyValuePairs[0].equals(ip)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("잘못된 ip입니다.");
+        }
 
         Authentication authentication = customTokenProviderService.getAuthenticationByEmail(email);
 
@@ -228,7 +245,7 @@ public class AuthService {
         System.out.println("setValuesWithTimeout : " + tokenMapping.getRefreshToken());
         System.out.println("deleteValues : " + tokenRefreshRequest);
 
-        redisService.setValuesWithTimeout(tokenMapping.getRefreshToken(),email,1209600);
+        redisService.setValuesWithTimeout(tokenMapping.getRefreshToken(), values,1209600);
         redisService.deleteValues(tokenRefreshRequest.getRefreshToken());
 
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", tokenMapping.getRefreshToken())
