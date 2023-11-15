@@ -1,5 +1,7 @@
-package com.office.libooksserver.reservation.studyroom;
+package com.office.libooksserver.user.service;
 
+import com.office.libooksserver.user.dto.StudyRoomDto;
+import com.office.libooksserver.user.service.implement.StudyRoomMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +12,7 @@ public class StudyRoomService {
     @Autowired
     StudyRoomMapper studyRoomMapper;
 
-    public List<StudyRoomDto> checkRoom(int sr_date,int sr_room){
+    public List<StudyRoomDto> checkRoom(int sr_date, int sr_room){
 
         return studyRoomMapper.checkRoom(sr_date, sr_room);
 

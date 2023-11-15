@@ -8,8 +8,8 @@ import com.office.libooksserver.login.redis.service.RedisService;
 import com.office.libooksserver.login.repository.auth.CustomAuthorizationRequestRepository;
 import com.office.libooksserver.login.service.auth.CustomTokenProviderService;
 import com.office.libooksserver.login.service.token.TokenMapper;
-import com.office.libooksserver.login.service.user.UserDto;
-import com.office.libooksserver.login.service.user.UserMapper;
+import com.office.libooksserver.user.dto.UserDto;
+import com.office.libooksserver.user.service.implement.UserMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.office.libooksserver.login.repository.auth.CustomAuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
@@ -60,6 +62,11 @@ public class CustomSimpleUrlAuthenticationSuccessHandler extends SimpleUrlAuthen
 
         log.info("determineTargetUrl[]");
 
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null) ip = request.getRemoteAddr();
+
+        System.out.println("ip :" +  ip);
+
         Optional<String> redirectUri = CustomCookie.getCookie(request, REDIRECT_URI_PARAM_COOKIE_NAME).map(Cookie::getValue);
 
         DefaultAssert.isAuthentication( !(redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) );
@@ -77,8 +84,12 @@ public class CustomSimpleUrlAuthenticationSuccessHandler extends SimpleUrlAuthen
                     .build().toUriString();
         }
 
+        Map<String, String> values = new HashMap<>();
+        values.put("ip", ip);
+        values.put("email", tokenMapping.getUserEmail());
 
-        redisService.setValuesWithTimeout(tokenMapping.getRefreshToken(),tokenMapping.getUserEmail(),1209600);
+
+        redisService.setValuesWithTimeout(tokenMapping.getRefreshToken(),values,1209600);
 
         Cookie refreshToken = new Cookie("refreshToken", tokenMapping.getRefreshToken());
         refreshToken.setPath("/");

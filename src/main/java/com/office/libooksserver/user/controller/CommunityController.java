@@ -1,21 +1,16 @@
 package com.office.libooksserver.user.controller;
 
-import com.office.libooksserver.user.dto.BookDto;
+import com.office.libooksserver.login.config.security.token.CurrentUser;
+import com.office.libooksserver.login.config.security.token.UserPrincipal;
 import com.office.libooksserver.user.dto.CommunityDto;
 import com.office.libooksserver.user.dto.ReplyDto;
 import com.office.libooksserver.user.service.CommunityService;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.*;
+import java.util.Map;
 
 @RestController
 @Log4j2
@@ -91,7 +86,8 @@ public class CommunityController {
 
     @PostMapping("/write_comment")
     @ResponseBody
-    public int writeComment(@RequestBody ReplyDto replyDto){
+    public int writeComment(@RequestBody ReplyDto replyDto,@Parameter(description = "Accesstoken을 입력해주세요.", required = true) @CurrentUser UserPrincipal userPrincipal){
+        System.out.println("userPrincipal: "+userPrincipal);
         log.info("[CommunityController] writeComment()");
         return communityService.writeComment(replyDto);
     }

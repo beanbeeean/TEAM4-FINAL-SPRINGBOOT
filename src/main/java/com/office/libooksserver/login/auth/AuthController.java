@@ -91,9 +91,14 @@ public class AuthController {
     })
     @PostMapping(value = "/signin")
     public ResponseEntity<?> signin(
-        @Parameter(description = "Schemas의 SignInRequest를 참고해주세요.", required = true) @Valid @RequestBody SignInRequest signInRequest
+        @Parameter(description = "Schemas의 SignInRequest를 참고해주세요.", required = true) @Valid @RequestBody SignInRequest signInRequest, HttpServletRequest request
     ) {
-        return authService.signin(signInRequest);
+
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null) ip = request.getRemoteAddr();
+        System.out.println("ip :" +  ip);
+
+        return authService.signin(signInRequest, ip);
     }
 
     @Operation(summary = "유저 회원가입", description = "유저 회원가입을 수행합니다.")
@@ -118,6 +123,10 @@ public class AuthController {
     @PostMapping(value = "/refresh")
     public ResponseEntity<?> refresh(HttpServletRequest request) {
 
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null) ip = request.getRemoteAddr();
+        System.out.println("ip :" +  ip);
+
         RefreshTokenRequest tokenRefreshRequest = null;
 
         Cookie[] cookies = request.getCookies();
@@ -132,10 +141,10 @@ public class AuthController {
             }
         }
 
-        System.out.println("tokenRefreshRequest : "+tokenRefreshRequest.getRefreshToken());
+        System.out.println("tokenRefreshRequest : " + tokenRefreshRequest.getRefreshToken());
 
 
-        return authService.refresh(tokenRefreshRequest);
+        return authService.refresh(tokenRefreshRequest, ip);
     }
 
     @Operation(summary = "유저 로그아웃", description = "유저 로그아웃을 수행합니다.")
@@ -159,6 +168,10 @@ public class AuthController {
                 }
             }
         }
+
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null) ip = request.getRemoteAddr();
+        System.out.println("ip :" +  ip);
 
         System.out.println("tokenRefreshRequest : "+tokenRefreshRequest.getRefreshToken());
 

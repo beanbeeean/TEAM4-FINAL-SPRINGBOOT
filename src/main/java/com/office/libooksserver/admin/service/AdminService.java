@@ -1,7 +1,7 @@
 package com.office.libooksserver.admin.service;
 
 import com.office.libooksserver.admin.service.implement.IAdminDaoMapper;
-import com.office.libooksserver.login.service.user.UserDto;
+import com.office.libooksserver.user.dto.UserDto;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

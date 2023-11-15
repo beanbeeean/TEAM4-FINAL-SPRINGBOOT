@@ -30,7 +30,7 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter{
 
         if (StringUtils.hasText(jwt) && customTokenProviderService.validateToken(jwt)) {
 
-            log.info("doFilterInternal[] 2'");
+            log.info("doFilterInternal[] 2");
 
             UsernamePasswordAuthenticationToken authentication = customTokenProviderService.getAuthenticationById(jwt);
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -50,7 +50,7 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter{
 
     private String getJwtFromRequest(HttpServletRequest request) {
 
-//        log.info("getJwtFromRequest[]");
+        log.info("getJwtFromRequest[]");
 
         String bearerToken = request.getHeader("Authorization");
 

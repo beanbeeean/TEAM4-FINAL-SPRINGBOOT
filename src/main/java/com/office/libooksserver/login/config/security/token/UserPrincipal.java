@@ -1,6 +1,6 @@
 package com.office.libooksserver.login.config.security.token;
 
-import com.office.libooksserver.login.service.user.UserDto;
+import com.office.libooksserver.user.dto.UserDto;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

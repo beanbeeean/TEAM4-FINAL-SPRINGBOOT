@@ -1,9 +1,9 @@
 package com.office.libooksserver.admin.controller;
 
-import com.office.libooksserver.reservation.readroom.ReadRoomDto;
-import com.office.libooksserver.reservation.readroom.ReadRoomService;
-import com.office.libooksserver.reservation.studyroom.StudyRoomDto;
-import com.office.libooksserver.reservation.studyroom.StudyRoomService;
+import com.office.libooksserver.user.dto.ReadRoomDto;
+import com.office.libooksserver.user.service.ReadRoomService;
+import com.office.libooksserver.user.dto.StudyRoomDto;
+import com.office.libooksserver.user.service.StudyRoomService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

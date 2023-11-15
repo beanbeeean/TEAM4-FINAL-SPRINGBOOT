@@ -2,21 +2,21 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.office.libooksserver.login.service.user.UserMapper">
+<mapper namespace="com.office.libooksserver.user.service.implement.UserMapper">
 
-    <select id="findByid" parameterType="long" resultType="com.office.libooksserver.login.service.user.UserDto">
+    <select id="findByid" parameterType="long" resultType="com.office.libooksserver.user.dto.UserDto">
 
         SELECT * FROM tbl_user WHERE u_no = #{u_no}
 
     </select>
 
-    <select id="findByEmail" parameterType="String" resultType="com.office.libooksserver.login.service.user.UserDto">
+    <select id="findByEmail" parameterType="String" resultType="com.office.libooksserver.user.dto.UserDto">
 
         SELECT * FROM tbl_user WHERE u_email = #{u_email}
 
     </select>
 
-    <update id="userUpdate" parameterType="com.office.libooksserver.login.service.user.UserDto">
+    <update id="userUpdate" parameterType="com.office.libooksserver.user.dto.UserDto">
 
         UPDATE tbl_user SET u_name = #{u_name}, u_phone = #{u_phone},u_mod_date = now() WHERE u_email = #{u_email}
 
@@ -28,20 +28,20 @@
 
     </select>
 
-    <insert id="save" parameterType="com.office.libooksserver.login.service.user.UserDto">
+    <insert id="save" parameterType="com.office.libooksserver.user.dto.UserDto">
 
         INSERT INTO tbl_user (u_email, u_name, u_password,u_image, u_provider, u_role, u_state,u_reg_date, u_mod_date)
         VALUES (#{u_email}, #{u_name}, #{u_password},#{u_image}, #{u_provider}, #{u_role}, #{u_state},now(), now())
 
     </insert>
 
-    <update id="update" parameterType="com.office.libooksserver.login.service.user.UserDto">
+    <update id="update" parameterType="com.office.libooksserver.user.dto.UserDto">
 
         UPDATE tbl_user SET u_password = #{u_password}, u_mod_date = now() WHERE u_email = #{u_email}
 
     </update>
 
-    <update id="imgUpdate" parameterType="com.office.libooksserver.login.service.user.UserDto">
+    <update id="imgUpdate" parameterType="com.office.libooksserver.user.dto.UserDto">
 
         UPDATE tbl_user SET u_image = #{u_image}, u_mod_date = now() WHERE u_email = #{u_email}
 
@@ -55,14 +55,14 @@
 
     </update>
 
-    <select id="myReadReservation" parameterType="String" resultType="com.office.libooksserver.reservation.readroom.ReadRoomDto">
+    <select id="myReadReservation" parameterType="String" resultType="com.office.libooksserver.user.dto.ReadRoomDto">
 
 
         SELECT * FROM tbl_reservaion_log WHERE l_email = #{u_email} and #{start} &lt; l_reg_date and l_reg_date &lt;= #{end} order by l_reg_date desc
 
     </select>
 
-    <select id="myStudyReservation" parameterType="HashMap" resultType="com.office.libooksserver.reservation.studyroom.StudyRoomDto">
+    <select id="myStudyReservation" parameterType="HashMap" resultType="com.office.libooksserver.user.dto.StudyRoomDto">
 
         SELECT * FROM tbl_study_reservation WHERE sr_email = #{u_email} and sr_date BETWEEN #{start} AND #{end} order by sr_date desc ,sr_time desc
 
