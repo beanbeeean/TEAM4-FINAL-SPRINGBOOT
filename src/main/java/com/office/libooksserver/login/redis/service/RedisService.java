@@ -23,7 +23,8 @@ public class RedisService {
     // 만료시간 설정 -> 자동 삭제
     @Transactional
     public void setValuesWithTimeout(String key, Map<String, String> value, long timeout){
-        redisTemplate.opsForValue().set(key, value.toString(), timeout, TimeUnit.MILLISECONDS);
+        redisTemplate.opsForValue().set(key, value.toString());
+        redisTemplate.expire(key, timeout, TimeUnit.SECONDS);
     }
 
     public String getValues(String key){

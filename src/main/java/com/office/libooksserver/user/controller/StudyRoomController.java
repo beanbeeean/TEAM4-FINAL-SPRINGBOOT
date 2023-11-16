@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -34,9 +35,26 @@ public class StudyRoomController {
         System.out.println("roomTime : " + roomTime);
 
         int[][] time;
+        LocalDateTime localDateTime = LocalDateTime.now();
+        int hour = localDateTime.getHour();
+        int day = localDateTime.getDayOfMonth();
+
+        int today = room.get("date");
+        int now = today%100;
+
         time = new int[6][24];
 
-        for(int i = 0; i< roomTime.size(); i++){
+        for(int i = 8; i <= hour; i++){
+            if(hour > 22)
+                break;
+            for(int j = 0; j < 6; j++){
+                if(day==now) {
+                    time[j][i] = 1;
+                }
+            }
+        }
+
+        for(int i = 0; i < roomTime.size(); i++){
             time[roomTime.get(i).getSr_room()][roomTime.get(i).getSr_time()]=1;
 
             System.out.println(" time[roomTime.get(i).getSr_room()][roomTime.get(i).getSr_time()] : " +  time[roomTime.get(i).getSr_room()][roomTime.get(i).getSr_time()]);
@@ -53,8 +71,8 @@ public class StudyRoomController {
         System.out.println("studyRoomDto : " + studyRoomDto);
 
         for(int i=0; i<studyRoomDto.getTime();i++) {
-            studyRoomDto.setSr_time(studyRoomDto.getSr_time());
             studyRoomService.reservationRoom(studyRoomDto);
+            studyRoomDto.setSr_time(studyRoomDto.getSr_time()+1);
         }
 
         return ResponseEntity.ok("");
