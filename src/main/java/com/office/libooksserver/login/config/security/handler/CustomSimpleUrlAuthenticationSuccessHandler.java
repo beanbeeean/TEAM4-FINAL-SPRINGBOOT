@@ -79,7 +79,8 @@ public class CustomSimpleUrlAuthenticationSuccessHandler extends SimpleUrlAuthen
 
         if(userDto.getU_state().equals("0")) {
             System.out.println("targetUrl : " + targetUrl);
-            return UriComponentsBuilder.fromUriString("http://localhost:3000/")
+//            return UriComponentsBuilder.fromUriString("http://lcoalhost:3000/")
+            return UriComponentsBuilder.fromUriString("http://libooks-alb-1739935494.ap-northeast-2.elb.amazonaws.com")
                     .queryParam("error", "error")
                     .build().toUriString();
         }
