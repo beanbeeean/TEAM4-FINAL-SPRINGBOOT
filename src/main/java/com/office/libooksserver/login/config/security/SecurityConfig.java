@@ -118,11 +118,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
                 .antMatchers("/chat/list")
                 .permitAll()
                 .antMatchers("/chat/**")
-                .hasRole("USER")
+                .permitAll()
                 .antMatchers("/ws-stomp")
-                .hasRole("USER")
+                .permitAll()
                 .antMatchers("/ws-stomp/**")
-                .hasRole("USER")
+                .permitAll()
 
                 //book
                 .antMatchers("/checkout_books/checkout")
