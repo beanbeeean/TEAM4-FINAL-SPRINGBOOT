@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.office.libooksserver.user.service.implement.IBookDaoMapper">
+
+    <select id="isBook" resultType="Integer" parameterType="String">
+        SELECT count(*) FROM tbl_books WHERE b_isbn = #{bIsbn}
+    </select>
+
+    <insert id="insertNewBook" >
+         INSERT INTO tbl_books( b_category, b_isbn, b_cover, b_title, b_author, b_publisher, b_publish_date, b_description, b_link, b_reg_date,  b_mod_date)
+        VALUES (#{b_category}, #{b_isbn}, #{b_cover}, #{b_title}, #{b_author}, #{b_publisher}, #{b_publish_date}, #{b_description}, #{b_link}, now(), now())
+    </insert>
+
+    <select id="selectBooksByFiltering" resultType="HashMap" parameterType="String">
+        SELECT * FROM tbl_books WHERE b_state = 1
+            <choose>
+                <when test="(category == 'all' or category == '') and keyword !=''">
+                    AND b_title LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="category == 'new' and keyword !=''">
+                    AND b_category = 2 AND b_title LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="category == 'new' and keyword ==''">
+                    AND b_category = 2
+                </when>
+                <when test="category == 'bestseller' and keyword !=''">
+                    AND b_category = 3 AND b_title LIKE CONCAT('%', #{keyword}, '%')
+                </when>
+                <when test="category == 'bestseller' and keyword ==''">
+                    AND b_category = 3
+                </when>
+            </choose>
+    </select>
+
+
+    <select id="getBookDetail"  parameterType="Integer" resultType="com.office.libooksserver.user.dto.BookDto">
+        SELECT * from tbl_books where b_no = #{bNo}
+    </select>
+
+    <insert id="insertCheckoutBook" parameterType="hashMap">
+        INSERT INTO tbl_chk_book(b_no, u_email, chk_b_start_date, chk_b_end_date, chk_b_reg_date, chk_b_mod_date)
+        VALUES (#{bNo}, #{uMail}, DATE_FORMAT(now(), '%Y-%m-%d'), DATE_FORMAT(DATE_ADD(NOW(), INTERVAL 7 DAY), '%Y-%m-%d'), now(), now())
+    </insert>
+
+    <update id="decreaseBookStock" parameterType="Integer">
+        UPDATE tbl_books SET b_stock = b_stock -1, b_mod_date = now() WHERE b_no = #{bNo} and b_stock > 0
+    </update>
+
+    <select id="selectChkBookList" resultType="HashMap" parameterType="String">
+        SELECT * FROM tbl_chk_book
+    </select>
+</mapper>

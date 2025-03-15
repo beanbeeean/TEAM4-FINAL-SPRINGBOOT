@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.office.libooksserver.user.service.implement.IChatMapper">
+
+    <insert id="insertChatRoomForUser" parameterType="String">
+        INSERT INTO tbl_user_chat(u_mail, u_name, room_id, join_idx, uc_reg_date, uc_mod_date) VALUES(#{param1}, #{param2}, #{param3}, #{param4}, now(), now())
+    </insert>
+
+    <select id="getUsersChatRooms" parameterType="String" resultType="String">
+        SELECT room_id FROM tbl_user_chat WHERE u_mail = #{param1}
+    </select>
+
+    <select id="isAlreadyJoined" parameterType="String" resultType="Integer">
+        SELECT COUNT(*) FROM tbl_user_chat WHERE room_id = #{param1} AND u_mail = #{param2}
+    </select>
+
+    <delete id="deleteChatRoomForUser" parameterType="String">
+        DELETE FROM tbl_user_chat WHERE u_mail = #{param1} AND room_id = #{param2}
+    </delete>
+
+    <select id="getUserJoinIdx" parameterType="String" resultType="String">
+        SELECT join_idx FROM tbl_user_chat WHERE room_id = #{param1} AND u_mail = #{param2}
+    </select>
+
+    <select id="getUserList" parameterType="String" resultType="com.office.libooksserver.user.dto.UserListDto">
+        SELECT * FROM tbl_user_chat WHERE room_id = #{param1}
+    </select>
+
+    <select id="getUserDetail" parameterType="String" resultType="com.office.libooksserver.user.dto.UserDto">
+        SELECT * FROM tbl_user WHERE u_email = #{u_mail}
+    </select>
+
+    <select id="getChatUserList" resultType="com.office.libooksserver.user.dto.UserListDto">
+        SELECT *
+        FROM tbl_user_chat
+        INNER JOIN tbl_user
+        ON tbl_user_chat.u_mail = tbl_user.u_email;
+    </select>
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.office.libooksserver.admin.service.implement.IAdminCommunityDaoMapper">
+    <select id="selectCommunityByFiltering" resultType="HashMap" parameterType="String">
+        SELECT * FROM tbl_community
+        <choose>
+            <when test="category == 'FREE' and keyword ==''">
+                WHERE c_category = 1
+            </when>
+            <when test="category == 'FREE' and keyword !=''">
+                WHERE c_category = 1 AND c_title LIKE CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test="category == 'RECOMMEND' and keyword ==''">
+                WHERE c_category = 2
+            </when>
+            <when test="category == 'RECOMMEND' and keyword !=''">
+                WHERE c_category = 2 AND c_title LIKE CONCAT('%', #{keyword}, '%')
+            </when>
+            <when test="category == 'GATHER' and keyword ==''">
+                WHERE c_category = 3
+            </when>
+            <when test="category == 'GATHER' and keyword !=''">
+                WHERE c_category = 3 AND c_title LIKE CONCAT('%', #{keyword}, '%')
+            </when>
+        </choose>
+        ORDER BY c_reg_date desc
+    </select>
+
+    <update id="updateCommunityState" parameterType="Integer">
+        UPDATE tbl_community
+        SET c_state = CASE
+                          WHEN c_state = 0 THEN 1
+                          WHEN c_state = 1 THEN 0
+            END
+        WHERE c_no = #{no}
+
+    </update>
+</mapper>

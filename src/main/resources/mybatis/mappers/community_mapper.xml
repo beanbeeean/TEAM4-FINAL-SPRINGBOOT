@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.office.libooksserver.user.service.implement.ICommunityDaoMapper">
+
+    <select id="selectCommunity" resultType="com.office.libooksserver.user.dto.CommunityDto">
+        SELECT
+        tbl_community.*,
+        tbl_user.u_name AS user_name
+        FROM tbl_community
+        LEFT JOIN tbl_user ON tbl_community.u_email = tbl_user.u_email
+        WHERE tbl_community.c_state = 1
+        <if test="category != 0">
+            AND
+            tbl_community.c_category = #{category}
+            <if test="keyword != '' ">
+                <choose>
+                    <when test="searchOption == 1">
+                        AND
+                        (
+                        tbl_community.c_title LIKE CONCAT('%', #{keyword}, '%')
+                        OR
+                        tbl_user.u_name LIKE CONCAT('%', #{keyword}, '%')
+                        )
+                    </when>
+                    <when test="searchOption == 2">
+                        AND
+                        tbl_community.c_title LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchOption == 3">
+                        AND
+                        tbl_user.u_name LIKE CONCAT('%', #{keyword}, '%')
+
+                    </when>
+                </choose>
+            </if>
+        </if>
+        <if test="category == 0 and keyword !=''">
+            AND
+            (
+            tbl_user.u_name LIKE CONCAT('%', #{keyword}, '%')
+            OR
+            tbl_community.c_title LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
+
+        ORDER BY tbl_community.c_reg_date DESC
+    </select>
+
+
+    <insert id="insertNewCommunity" parameterType="hashMap">
+        INSERT INTO tbl_community (u_email, c_category, c_title, c_content, c_reg_date, c_mod_date) VALUES (#{uMail}, #{category}, #{title}, #{content},  now(), now())
+    </insert>
+
+    <update id="updateCommunityHit" parameterType="Integer">
+        UPDATE tbl_community SET c_hit = c_hit +1 WHERE c_no = #{cNo}
+    </update>
+
+    <select id="getCommunityDetail"  parameterType="Integer" resultType="com.office.libooksserver.user.dto.CommunityDto">
+        SELECT * from tbl_community where c_no = #{cNo}
+    </select>
+
+    <update id="updateCommunity" parameterType="hashMap">
+        UPDATE tbl_community SET c_category = #{category}, c_title = #{title}, c_content = #{content}, c_mod_date = now() WHERE c_no = #{id}
+    </update>
+
+    <delete id="deleteCommunity" parameterType="Integer">
+        DELETE FROM tbl_community WHERE c_no = #{id}
+    </delete>
+
+    <select id="getCommunityCno" parameterType="hashMap" resultType="Integer">
+        SELECT c_no FROM tbl_community WHERE c_category = #{category} AND u_email = #{uMail} ORDER BY c_reg_date desc LIMIT 1;
+    </select>
+
+    <insert id="insertComment" parameterType="com.office.libooksserver.user.dto.ReplyDto">
+        INSERT INTO tbl_reply(c_no, r_comment, u_no, r_target_r_no, r_reg_date, r_mod_date)
+        VALUES(#{c_no}, #{r_comment}, #{u_no}, #{r_target_r_no}, now(), now())
+    </insert>
+
+    <select id="getComments" parameterType="Integer" resultType="com.office.libooksserver.user.dto.ReplyDto">
+        SELECT * FROM tbl_reply WHERE c_no = #{cNo}
+    </select>
+
+    <update id="updateComment" parameterType="com.office.libooksserver.user.dto.ReplyDto">
+        UPDATE tbl_reply SET r_comment = #{r_comment}, r_mod_date = now() WHERE r_no = #{r_no}
+    </update>
+
+    <delete id="deleteComment" parameterType="com.office.libooksserver.user.dto.ReplyDto">
+        DELETE FROM tbl_reply WHERE r_no = #{r_no}
+    </delete>
+
+
+</mapper>
